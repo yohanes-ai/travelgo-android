@@ -7,7 +7,7 @@ import android.os.Bundle
 class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme);
+        setTheme(R.style.AppTheme_Splash);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
