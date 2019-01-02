@@ -272,7 +272,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showMap(@DrawableRes resId: Int) {
-        if (decodeMapBitmapTask != null) {
+        if (this::decodeMapBitmapTask.isInitialized && decodeMapBitmapTask != null) {
             decodeMapBitmapTask.cancel(true)
         }
 
