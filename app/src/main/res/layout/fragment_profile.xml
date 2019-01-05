@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="@drawable/ic_background"
+                                             tools:context=".ProfileFragment" android:id="@+id/frameLayout3">
+
+    <TextView
+            android:text="Email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView14" android:textSize="18sp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp" app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="45dp"/>
+
+    <EditText
+            android:layout_width="168dp"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:id="@+id/editText5"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            app:layout_constraintStart_toEndOf="@+id/textView14"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.878" app:layout_constraintBaseline_toBaselineOf="@+id/textView14"/>
+
+    <TextView
+            android:text="Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView15" android:textSize="18sp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp" android:layout_marginTop="28dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView14"/>
+
+    <EditText
+            android:layout_width="168dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10" android:id="@+id/editText6"
+            android:layout_alignLeft="@+id/editText3" android:layout_alignStart="@+id/editText3"
+            android:layout_alignParentEnd="true" android:layout_alignParentRight="true"
+            android:layout_below="@+id/editText3"
+            app:layout_constraintStart_toEndOf="@+id/textView16" android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView16"/>
+
+    <TextView
+            android:text="Re-Type Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView16" android:textSize="18sp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp" android:layout_marginTop="28dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView15"/>
+
+    <EditText
+            android:layout_width="167dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10" android:id="@+id/editText7"
+            android:layout_alignLeft="@+id/editText3" android:layout_alignStart="@+id/editText3"
+            android:layout_alignParentEnd="true" android:layout_alignParentRight="true"
+            android:layout_below="@+id/editText4"
+            app:layout_constraintStart_toEndOf="@+id/textView15" android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.836" app:layout_constraintBaseline_toBaselineOf="@+id/textView15"/>
+    <TextView
+            android:text="Phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+            android:id="@+id/textView18" android:textSize="18sp" android:layout_marginTop="28dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView16"/>
+    <EditText
+            android:layout_width="168dp"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:ems="10"
+            android:id="@+id/editText9"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toEndOf="@+id/textView18"
+            android:layout_marginStart="8dp" app:layout_constraintBaseline_toBaselineOf="@+id/textView18"
+            app:layout_constraintHorizontal_bias="0.872"/>
+    <Button
+            android:text="Simpan"
+            android:layout_width="351dp"
+            android:layout_height="40dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp" android:id="@+id/button4"
+            style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue" android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+            android:text="Nama Tour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/textView19" android:textSize="18sp"
+            android:layout_marginStart="16dp" android:layout_marginTop="28dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView18"/>
+    <TextView
+            android:text="Deskripsi Tour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/textView20" android:textSize="18sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp" app:layout_constraintTop_toBottomOf="@+id/textView19"/>
+    <EditText
+            android:layout_width="171dp"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/editText11"
+            app:layout_constraintStart_toEndOf="@+id/textView20" android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.787" app:layout_constraintBaseline_toBaselineOf="@+id/textView20"/>
+    <EditText
+            android:layout_width="171dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editText12" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@+id/textView19"
+            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.846"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView19"/>
+</android.support.constraint.ConstraintLayout>

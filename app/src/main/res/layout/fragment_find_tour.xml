@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="@drawable/ic_background"
+                                             tools:context=".FindTourFragment" android:id="@+id/frameLayout2"
+                                             tools:layout_editor_absoluteY="25dp">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lokasi"
+            android:id="@+id/textView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:textSize="18sp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toStartOf="@+id/spinner" android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView4" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="29dp" android:layout_marginEnd="32dp"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"/>
+
+    <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            app:layout_constraintStart_toEndOf="@+id/textView" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="15dp" app:layout_constraintBottom_toTopOf="@+id/editText2"
+            android:layout_marginEnd="49dp" android:layout_marginTop="30dp" app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tanggal"
+            android:id="@+id/textView4"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@+id/textView" app:layout_constraintEnd_toStartOf="@+id/editText2"
+            android:layout_marginBottom="24dp" app:layout_constraintBottom_toTopOf="@+id/listview"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="29dp" android:layout_marginEnd="20dp"/>
+
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/editText2"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView4"
+            app:layout_constraintStart_toEndOf="@+id/textView4" android:layout_marginEnd="50dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ListView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/listview"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"/>
+</android.support.constraint.ConstraintLayout>
