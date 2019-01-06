@@ -10,7 +10,8 @@ import android.view.ViewGroup
 import android.widget.ListView
 import com.qreatiq.travelgo.adapters.PackageTourAdapter
 import com.qreatiq.travelgo.objects.PackageTour
-
+import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.support.v4.toast
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,8 +52,8 @@ class TourFragment : Fragment() {
         listView = viewLayout!!.findViewById(R.id.listview)
 
         var packageTours = arrayListOf<PackageTour>()
-        var packageTour1 = PackageTour(1, "Half Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 1500000)
-        var packageTour2 = PackageTour(1, "Full Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 2000000)
+        var packageTour1 = PackageTour(1, "Half Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 1500000, "Termasuk harga tiket masuk Taman Air Nirwana, Air Mancur Indah")
+        var packageTour2 = PackageTour(1, "Full Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 2000000, "Termasuk harga penginapan, tiket masuk Taman Air Nirwana, Air Mancur Indah")
 
         packageTours.add(packageTour1)
         packageTours.add(packageTour2)
@@ -61,6 +62,10 @@ class TourFragment : Fragment() {
         listView.adapter = adapter
         listView.setOnItemClickListener { parent, view, position, id ->
             val packageTour = packageTours[position]
+            alert(packageTour.detail!!,packageTour.title ) {
+                positiveButton("Beli Paket") { toast("Paket berhasil dimasukan ke keranjang") }
+                negativeButton("Tutup") { }
+            }.show()
         }
 
         return viewLayout
