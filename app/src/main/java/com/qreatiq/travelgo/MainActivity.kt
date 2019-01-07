@@ -17,6 +17,7 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -45,9 +46,7 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         val fragment1 : Fragment = HomeFragment()
-        val fragment2 : Fragment = LocationDetailFragment()
-        val fragment3 : Fragment = FindTourFragment()
-        val fragment4 : Fragment = TourFragment()
+        val fragment2 : Fragment = FindTourFragment()
         var fragment5 : Fragment = ProfileFragment()
 
         mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -55,21 +54,17 @@ class MainActivity : AppCompatActivity(),
             when (item.itemId) {
                 R.id.navigation_home -> {
                     fragment = fragment1;
+                    fragmentManager.beginTransaction().replace(R.id.frame, fragment).addToBackStack(R.id.navigation_home.toString()).commit();
                 }
                 R.id.navigation_travel -> {
                     fragment = fragment2;
-                }
-                R.id.navigation_location -> {
-                    fragment = fragment3;
-                }
-                R.id.navigation_notifications -> {
-                    fragment = fragment4;
+                    fragmentManager.beginTransaction().replace(R.id.frame, fragment).addToBackStack(R.id.navigation_travel.toString()).commit();
                 }
                 R.id.navigation_profile -> {
                     fragment = fragment5;
+                    fragmentManager.beginTransaction().replace(R.id.frame, fragment).addToBackStack(R.id.navigation_profile.toString()).commit();
                 }
             }
-            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
             return@OnNavigationItemSelectedListener true
         }
 
@@ -77,10 +72,25 @@ class MainActivity : AppCompatActivity(),
             fragmentManager.beginTransaction().replace(R.id.frame,  HomeFragment()).commit();
         }
 
+        fragmentManager.addOnBackStackChangedListener {
+            var f : Fragment = fragmentManager.findFragmentById(R.id.frame)
+            if(f is HomeFragment){
+                navigation.selectedItemId = R.id.navigation_home
+            }
+        }
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
     override fun onFragmentInteraction(uri: Uri) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onBackPressed() {
+        if(fragmentManager.backStackEntryCount > 0){
+            fragmentManager.popBackStackImmediate()
+        }else{
+            super.onBackPressed()
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,6 +29,7 @@ class LocationDetailFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    private var viewLayout : View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +44,17 @@ class LocationDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_location_detail, container, false)
+        viewLayout = inflater!!.inflate(R.layout.fragment_location_detail, container, false)
+        val findTourButton = viewLayout!!.findViewById<Button>(R.id.button5)
+
+        findTourButton.setOnClickListener {
+            val fragmentManager = getFragmentManager()
+            val fragment: Fragment = FindTourFragment()
+            fragmentManager!!.beginTransaction().replace(R.id.frame, fragment)
+                .addToBackStack(R.id.navigation_home.toString()).commit();
+        }
+
+        return viewLayout
     }
 
     // TODO: Rename method, update argument and hook method into UI event

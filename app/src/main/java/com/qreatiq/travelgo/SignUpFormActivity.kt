@@ -46,4 +46,9 @@ class SignUpFormActivity : AppCompatActivity() {
         callbackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+    public fun goToMain(v : View){
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
 }

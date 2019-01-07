@@ -47,21 +47,21 @@ class HomeFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
 
     private val dotCoords = Array(5) { IntArray(2) }
-    private val pics = intArrayOf(R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4, R.drawable.p5)
+    private val pics = intArrayOf(R.drawable.p6, R.drawable.p6, R.drawable.p6, R.drawable.p6, R.drawable.p6)
     private val maps = intArrayOf(
-        R.drawable.map_paris,
-        R.drawable.map_seoul,
-        R.drawable.map_london,
-        R.drawable.map_beijing,
-        R.drawable.map_greece
+        R.drawable.map_bali,
+        R.drawable.map_bali,
+        R.drawable.map_bali,
+        R.drawable.map_bali,
+        R.drawable.map_bali
     )
     private val descriptions =
-        intArrayOf(R.string.text1, R.string.text2, R.string.text3, R.string.text4, R.string.text5)
-    private val countries = arrayOf("PARIS", "SEOUL", "LONDON", "BEIJING", "THIRA")
-    private val places = arrayOf("The Louvre", "Gwanghwamun", "Tower Bridge", "Temple of Heaven", "Aegeana Sea")
-    private val temperatures = arrayOf("21°C", "19°C", "17°C", "23°C", "20°C")
+        intArrayOf(R.string.text1, R.string.text1, R.string.text1, R.string.text1, R.string.text1)
+    private val countries = arrayOf("Indonesia", "Indonesia", "Indonesia", "Indonesia", "Indonesia")
+    private val places = arrayOf("Bali", "Bali", "Bali", "Bali", "Bali")
+    private val temperatures = arrayOf("4.1", "4.1", "4.1", "4.1", "4.1")
     private val times =
-        arrayOf("Aug 1 - Dec 15    7:00-18:00", "Sep 5 - Nov 10    8:00-16:00", "Mar 8 - May 21    7:00-18:00")
+        arrayOf("Aug 1 - Dec 15", "Aug 1 - Dec 15", "Aug 1 - Dec 15")
 
     private val sliderAdapter = SliderAdapter(pics, 20, OnCardClickListener())
 
@@ -400,34 +400,37 @@ class HomeFragment : Fragment() {
 
     private inner class OnCardClickListener : View.OnClickListener {
         override fun onClick(view: View) {
-            val lm = recyclerView.getLayoutManager() as CardSliderLayoutManager?
-
-            if (lm!!.isSmoothScrolling) {
-                return
-            }
-
-            val activeCardPosition = lm.activeCardPosition
-            if (activeCardPosition == RecyclerView.NO_POSITION) {
-                return
-            }
-
-            val clickedPosition = recyclerView.getChildAdapterPosition(view)
-            if (clickedPosition == activeCardPosition) {
-                val intent = Intent(context, DetailsActivity::class.java)
-                intent.putExtra(DetailsActivity.BUNDLE_IMAGE_ID, pics[activeCardPosition % pics.size])
-
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(intent)
-                } else {
-                    val cardView = view as CardView
-                    val sharedView = cardView.getChildAt(cardView.childCount - 1)
-                    val options = ActivityOptions.makeSceneTransitionAnimation(activity, sharedView, "shared")
-                    startActivity(intent, options.toBundle())
-                }
-            } else if (clickedPosition > activeCardPosition) {
-                recyclerView.smoothScrollToPosition(clickedPosition)
-                onActiveCardChange(clickedPosition)
-            }
+            val fragmentManager = getFragmentManager()
+            val fragment : Fragment = LocationDetailFragment()
+            fragmentManager!!.beginTransaction().replace(R.id.frame, fragment).addToBackStack(R.id.navigation_home.toString()).commit();
+//            val lm = recyclerView.getLayoutManager() as CardSliderLayoutManager?
+//
+//            if (lm!!.isSmoothScrolling) {
+//                return
+//            }
+//
+//            val activeCardPosition = lm.activeCardPosition
+//            if (activeCardPosition == RecyclerView.NO_POSITION) {
+//                return
+//            }
+//
+//            val clickedPosition = recyclerView.getChildAdapterPosition(view)
+//            if (clickedPosition == activeCardPosition) {
+//                val intent = Intent(context, DetailsActivity::class.java)
+//                intent.putExtra(DetailsActivity.BUNDLE_IMAGE_ID, pics[activeCardPosition % pics.size])
+//
+//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//                    startActivity(intent)
+//                } else {
+//                    val cardView = view as CardView
+//                    val sharedView = cardView.getChildAt(cardView.childCount - 1)
+//                    val options = ActivityOptions.makeSceneTransitionAnimation(activity, sharedView, "shared")
+//                    startActivity(intent, options.toBundle())
+//                }
+//            } else if (clickedPosition > activeCardPosition) {
+//                recyclerView.smoothScrollToPosition(clickedPosition)
+//                onActiveCardChange(clickedPosition)
+//            }
         }
     }
 }

@@ -65,6 +65,11 @@ class FindTourFragment : Fragment() {
         listView.adapter = adapter
         listView.setOnItemClickListener { parent, view, position, id ->
             val selectedTour = findTours[position]
+
+            val fragmentManager = getFragmentManager()
+            val fragment: Fragment = TourFragment()
+            fragmentManager!!.beginTransaction().replace(R.id.frame, fragment)
+                .addToBackStack(R.id.navigation_home.toString()).commit();
         }
 
         var cities = arrayListOf<String>()

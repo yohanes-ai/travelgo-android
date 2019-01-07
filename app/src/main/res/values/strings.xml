@@ -12,17 +12,9 @@
     <string name="fb_login_protocol_scheme">fb277919689561627</string>
 
     <!-- Sample Text -->
-    <string name="text1">The museum is housed in the Louvre Palace, originally built as a fortress in the late 12th
-        century…
+    <string name="text1">
+        Bali is an Indonesian island known for its forested volcanic mountains, iconic rice paddies, beaches and coral reefs. The island is home to religious sites such as cliffside Uluwatu Temple.
     </string>
-    <string name="text2">Gwanghwamun is the main and largest gate of Gyeongbokgung Palace, in Jongno-gu, Seoul, South
-        Korea.
-    </string>
-    <string name="text3">Tower Bridge is a combined bascule and suspension bridge in London built in 1886–1894.</string>
-    <string name="text4">The Temple of Heaven is an imperial complex of religious buildings situated in the southeastern
-        part…
-    </string>
-    <string name="text5">The Aegean Islands are within the sea and some bound it on its southern periphery…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
