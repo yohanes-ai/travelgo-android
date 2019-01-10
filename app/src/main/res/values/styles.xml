@@ -9,7 +9,7 @@
     </style>
 
     <style name="AppTheme.Splash" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/ic_splash</item>
+        <item name="android:windowBackground">@drawable/ic_splash_screen</item>
     </style>
 
     <style name="Widget.AppCompat.Button.Colored.Qreatiq.Blue" parent="Base.Widget.AppCompat.Button.Colored">

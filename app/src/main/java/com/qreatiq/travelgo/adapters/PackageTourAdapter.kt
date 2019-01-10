@@ -4,16 +4,17 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import com.qreatiq.travelgo.R
 import com.qreatiq.travelgo.objects.PackageTour
 import com.squareup.picasso.Picasso
+import org.jetbrains.anko.find
+import org.jetbrains.anko.sdk27.coroutines.onClick
+import java.text.DecimalFormat
 
 class PackageTourAdapter(private val context : Context, private val dataSource : ArrayList<PackageTour>) : BaseAdapter(){
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
+    private val format = DecimalFormat("#,###")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View
         val holder: ViewHolder
@@ -25,24 +26,37 @@ class PackageTourAdapter(private val context : Context, private val dataSource :
             holder.titleTextView = view.findViewById<TextView>(R.id.textView9)
             holder.priceTextView = view.findViewById<TextView>(R.id.textView21)
             holder.detailTextView = view.findViewById<TextView>(R.id.textView10)
+            holder.addButton = view.findViewById<ImageButton>(R.id.imageButton2)
+            holder.minButton = view.findViewById<ImageButton>(R.id.imageButton3)
+            holder.packEditText = view.findViewById<EditText>(R.id.editText8)
 
             view.tag = holder
         } else {
             view = convertView
-            holder = convertView.tag as ViewHolder
+            holder = view.tag as ViewHolder
         }
-
-        val titleTextView = holder.titleTextView
-        val priceTextView = holder.priceTextView
-        val contentTextView = holder.detailTextView
-        val thumbnailImageView = holder.thumbnailImageView
 
         val tour = getItem(position) as PackageTour
 
-        titleTextView.text = tour.title
-        priceTextView.text = "Rp " + tour.price.toString()
-        contentTextView.text = tour.content
-        Picasso.get().load(tour.imageURL).placeholder(R.mipmap.ic_launcher).into(thumbnailImageView)
+        holder.titleTextView.text = tour.title
+        holder.priceTextView.text = "Rp " + format.format(tour.price)
+        holder.detailTextView.text = tour.content
+        Picasso.get().load(tour.imageURL).placeholder(R.mipmap.ic_launcher).into(holder.thumbnailImageView)
+        holder.packEditText.setText(tour.qty.toString())
+
+        holder.addButton.setOnClickListener(){
+            var data : Int = holder.packEditText.text.toString().toInt() + 1
+            holder.packEditText.setText(data.toString())
+            dataSource[position].qty = data
+        }
+
+        holder.minButton.setOnClickListener(){
+            var data : Int = holder.packEditText.text.toString().toInt() - 1
+            if(data >= 0){
+                holder.packEditText.setText((data).toString())
+                dataSource[position].qty = data
+            }
+        }
 
         return view
     }
@@ -64,5 +78,8 @@ class PackageTourAdapter(private val context : Context, private val dataSource :
         lateinit var detailTextView: TextView
         lateinit var priceTextView: TextView
         lateinit var thumbnailImageView: ImageView
+        lateinit var addButton : ImageButton
+        lateinit var minButton : ImageButton
+        lateinit var packEditText: EditText
     }
 }

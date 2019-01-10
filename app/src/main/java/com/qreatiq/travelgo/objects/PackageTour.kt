@@ -7,6 +7,7 @@ class PackageTour{
     var price : Int? = null
     var detail : String? = null
     var imageURL : String? = null
+    var qty : Int = 0
 
     constructor(id: Int, title: String, content : String, imageURL : String, price : Int, detail : String){
         this.id = id

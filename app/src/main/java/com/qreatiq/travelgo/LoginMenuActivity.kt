@@ -23,9 +23,4 @@ class LoginMenuActivity : AppCompatActivity() {
         val intent = Intent( this, SignUpFormActivity::class.java)
         startActivity(intent)
     }
-
-    public fun guestAction(v : View){
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
 }

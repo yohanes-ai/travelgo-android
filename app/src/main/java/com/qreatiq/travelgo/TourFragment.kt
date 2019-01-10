@@ -7,11 +7,16 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ListView
 import com.qreatiq.travelgo.adapters.PackageTourAdapter
 import com.qreatiq.travelgo.objects.PackageTour
+import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.toast
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,6 +37,7 @@ class TourFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var listView: ListView
+    private lateinit var button : Button
     private lateinit var viewLayout : View
     private var listener: OnFragmentInteractionListener? = null
 
@@ -49,14 +55,23 @@ class TourFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         viewLayout = inflater!!.inflate(R.layout.fragment_tour, container, false)
-        listView = viewLayout!!.findViewById(R.id.listview)
+        listView = viewLayout!!.findViewById<ListView>(R.id.listview)
+        button = viewLayout!!.findViewById<Button>(R.id.button7)
 
         var packageTours = arrayListOf<PackageTour>()
         var packageTour1 = PackageTour(1, "Half Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 1500000, "Termasuk harga tiket masuk Taman Air Nirwana, Air Mancur Indah")
-        var packageTour2 = PackageTour(1, "Full Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 2000000, "Termasuk harga penginapan, tiket masuk Taman Air Nirwana, Air Mancur Indah")
+        var packageTour2 = PackageTour(2, "Full Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 2000000, "Termasuk harga penginapan, tiket masuk Taman Air Nirwana, Air Mancur Indah")
+        var packageTour3 = PackageTour(3, "Full Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 2000000, "Termasuk harga penginapan, tiket masuk Taman Air Nirwana, Air Mancur Indah")
+        var packageTour4 = PackageTour(4, "Full Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 2000000, "Termasuk harga penginapan, tiket masuk Taman Air Nirwana, Air Mancur Indah")
+        var packageTour5 = PackageTour(5, "Full Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 2000000, "Termasuk harga penginapan, tiket masuk Taman Air Nirwana, Air Mancur Indah")
+        var packageTour6 = PackageTour(36, "Full Day Activity", "Belum termasuk tiket pesawat", "https://i.imgur.com/zZSwAwH.png", 2000000, "Termasuk harga penginapan, tiket masuk Taman Air Nirwana, Air Mancur Indah")
 
         packageTours.add(packageTour1)
         packageTours.add(packageTour2)
+        packageTours.add(packageTour3)
+        packageTours.add(packageTour4)
+        packageTours.add(packageTour5)
+        packageTours.add(packageTour6)
 
         val adapter = PackageTourAdapter(context!!, packageTours)
         listView.adapter = adapter
@@ -67,6 +82,22 @@ class TourFragment : Fragment() {
                 negativeButton("Tutup") { }
             }.show()
         }
+
+
+        button.setOnClickListener{
+            val format = DecimalFormat("#,###")
+            var totalBayar : Int = 0
+            for(packageTour in packageTours){
+                totalBayar += packageTour.qty * packageTour.price!!
+            }
+
+            alert("Total yang harus dibayarkan Rp " + format.format(totalBayar),"Konfirmasi Pembayaran") {
+                positiveButton("Bayar Paket") { toast("Paket berhasil dimasukan ke keranjang") }
+                negativeButton("Tutup") { }
+            }.show()
+        }
+
+        listView.setItemsCanFocus(true)
 
         return viewLayout
     }
