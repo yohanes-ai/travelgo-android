@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
+import android.util.SparseArray
+import java.util.*
+
 
 class MainActivity : AppCompatActivity(),
     LocationDetailFragment.OnFragmentInteractionListener,
@@ -19,49 +22,54 @@ class MainActivity : AppCompatActivity(),
 
     private val fragmentManager = getSupportFragmentManager()
     private lateinit var mOnNavigationItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener
+    private val TAG_HOME = "HOME"
+    private val TAG_FIND_TOUR = "FIND_TOUR"
+    private val TAG_PROFILE = "PROFILE"
+    private var myFragments:LinkedList<Fragment> = LinkedList()
+    private var fragmentCurr : Fragment = Fragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val fragment1 : Fragment = HomeFragment()
-        val fragment2 : Fragment = FindTourFragment()
-        var fragment5 : Fragment = ProfileFragment()
-
         val bottomNavigation : BottomNavigationView = findViewById(R.id.navigation)
 
+        val fragmentHome : Fragment = HomeFragment()
+        val fragmentFindTour : Fragment = FindTourFragment()
+        val fragmentProfile : Fragment = ProfileFragment()
+
         mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-            var fragment : Fragment = fragment1
-            var id : Int = 0;
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    fragment = fragment1
-                    id = R.id.navigation_home
+                    fragmentManager.beginTransaction().hide(fragmentCurr).show(fragmentHome).commit()
+                    fragmentCurr = fragmentHome
+                    myFragments.push(fragmentHome)
+                    return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_travel -> {
-                    fragment = fragment2
-                    id = R.id.navigation_travel
+                    fragmentManager.beginTransaction().hide(fragmentCurr).show(fragmentFindTour).commit()
+                    fragmentCurr = fragmentFindTour
+                    myFragments.push(fragmentFindTour)
+                    return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_profile -> {
-                    fragment = fragment5;
-                    id = R.id.navigation_profile
+                    fragmentManager.beginTransaction().hide(fragmentCurr).show(fragmentProfile).commit()
+                    fragmentCurr = fragmentProfile
+                    myFragments.push(fragmentProfile)
+                    return@OnNavigationItemSelectedListener true
                 }
             }
-            Log.e("XXX", "XXX " + id.toString())
 
-            var tempFragment : Fragment? = fragmentManager.findFragmentByTag(id.toString()) as Fragment?
-            if(tempFragment == null){
-                fragmentManager.beginTransaction().add(R.id.frame, fragment, id.toString()).addToBackStack(id.toString()).commit();
-            }else{
-                fragmentManager.beginTransaction().attach(tempFragment)
-            }
-
-            return@OnNavigationItemSelectedListener true
+            return@OnNavigationItemSelectedListener false
         }
 
         if (savedInstanceState == null) {
-            Log.e("XXX", "XXX " + R.id.navigation_home.toString())
-            fragmentManager.beginTransaction().replace(R.id.frame,  HomeFragment(),  R.id.navigation_home.toString()).commit();
+            fragmentManager.beginTransaction().add(R.id.frame, fragmentProfile, TAG_PROFILE).hide(fragmentProfile).commit()
+            fragmentManager.beginTransaction().add(R.id.frame, fragmentFindTour, TAG_FIND_TOUR).hide(fragmentFindTour).commit()
+            fragmentManager.beginTransaction().add(R.id.frame, fragmentHome, TAG_HOME).commit()
+
+            fragmentCurr = fragmentHome
+            myFragments.push(fragmentHome)
         }
 
         fragmentManager.addOnBackStackChangedListener {
@@ -92,7 +100,16 @@ class MainActivity : AppCompatActivity(),
         if(fragmentManager.backStackEntryCount > 0){
             fragmentManager.popBackStack()
         }else{
-            super.onBackPressed()
+            if(myFragments.count() > 0){
+                var fragment : Fragment = myFragments.pop()
+                while(fragment != null && fragment == fragmentCurr){
+                    fragment = myFragments.pop()
+                }
+                fragmentManager.beginTransaction().hide(fragmentCurr).show(fragment).commit()
+                fragmentCurr = fragment
+            }else{
+                super.onBackPressed()
+            }
         }
     }
 }
