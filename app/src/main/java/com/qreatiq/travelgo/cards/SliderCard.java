@@ -15,12 +15,14 @@ public class SliderCard extends RecyclerView.ViewHolder implements DecodeBitmapT
     private static int viewHeight = 0;
 
     private final ImageView imageView;
+    View view;
 
     private DecodeBitmapTask task;
 
     public SliderCard(View itemView) {
         super(itemView);
         imageView = (ImageView) itemView.findViewById(R.id.image);
+        view = itemView;
     }
 
     void setContent(@DrawableRes final int resId) {

@@ -8,12 +8,13 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <string name="facebook_app_id">277919689561627</string>
-    <string name="fb_login_protocol_scheme">fb277919689561627</string>
+    <string name="facebook_app_id">534717363703723</string>
+    <string name="fb_login_protocol_scheme">fb534717363703723</string>
 
     <!-- Sample Text -->
     <string name="text1">
-        Bali is an Indonesian island known for its forested volcanic mountains, iconic rice paddies, beaches and coral reefs. The island is home to religious sites such as cliffside Uluwatu Temple.
+        Bali is an Indonesian island known for its forested volcanic mountains, iconic rice paddies, beaches and coral
+        reefs. The island is home to religious sites such as cliffside Uluwatu Temple.
     </string>
 
     <!-- TODO: Remove or change this placeholder text -->

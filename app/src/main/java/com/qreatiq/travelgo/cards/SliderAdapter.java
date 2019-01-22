@@ -12,6 +12,15 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderCard> {
     private final int count;
     private final int[] content;
     private final View.OnClickListener listener;
+    private ClickListener clickListener;
+
+    public void setOnItemClickListener(ClickListener clickListener){
+        this.clickListener = clickListener;
+    }
+
+    public interface ClickListener{
+        void onItemClick(int position, View v);
+    }
 
     public SliderAdapter(int[] content, int count, View.OnClickListener listener) {
         this.content = content;
@@ -25,20 +34,19 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderCard> {
                 .from(parent.getContext())
                 .inflate(R.layout.layout_slider_card, parent, false);
 
-        if (listener != null) {
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onClick(view);
-                }
-            });
-        }
-
         return new SliderCard(view);
     }
 
     @Override
-    public void onBindViewHolder(SliderCard holder, int position) {
+    public void onBindViewHolder(final SliderCard holder, int position) {
+        if (listener != null) {
+            holder.view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(holder.getAdapterPosition(), view);
+                }
+            });
+        }
         holder.setContent(content[position % content.length]);
     }
 

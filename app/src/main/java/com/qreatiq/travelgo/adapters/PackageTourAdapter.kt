@@ -41,7 +41,8 @@ class PackageTourAdapter(private val context : Context, private val dataSource :
         holder.titleTextView.text = tour.title
         holder.priceTextView.text = "Rp " + format.format(tour.price)
         holder.detailTextView.text = tour.content
-        Picasso.get().load(tour.imageURL).placeholder(R.mipmap.ic_launcher).into(holder.thumbnailImageView)
+        if(!tour.imageURL.equals(""))
+            Picasso.get().load(tour.imageURL).placeholder(R.mipmap.ic_launcher).into(holder.thumbnailImageView)
         holder.packEditText.setText(tour.qty.toString())
 
         holder.addButton.setOnClickListener(){

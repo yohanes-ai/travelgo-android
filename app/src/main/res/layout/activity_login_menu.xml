@@ -25,7 +25,7 @@
             app:layout_constraintBottom_toTopOf="@+id/button2" app:layout_constraintVertical_bias="0.0"/>
     <Button
             android:text="SIGNUP"
-            android:layout_width="341dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button"
             android:onClick="signUpAction"
@@ -37,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/imageView" app:layout_constraintHorizontal_bias="0.481"/>
     <Button
             android:text="LOGIN"
-            android:layout_width="340dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button2"
             style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue"

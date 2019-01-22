@@ -42,4 +42,5 @@ dependencies {
     implementation 'com.ramotion.cardslider:card-slider:0.3.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation "org.jetbrains.anko:anko:$anko_version"
+    implementation 'com.android.volley:volley:1.1.0'
 }
