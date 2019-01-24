@@ -26,7 +26,9 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -192,6 +194,11 @@ public class CreateTourActivity extends AppCompatActivity {
         });
     }
 
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -249,7 +256,7 @@ public class CreateTourActivity extends AppCompatActivity {
                 Snackbar snackbar=Snackbar.make(layout,"End Date is empty",Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
-            else if(array1.size()>0) {
+            else if(array1.size()==0) {
                 Snackbar snackbar=Snackbar.make(layout,"Minimal 1 Tour Package",Snackbar.LENGTH_LONG);
                 snackbar.show();
             }

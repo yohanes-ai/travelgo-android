@@ -24,6 +24,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 public class CreateTourPackageAdapter extends RecyclerView.Adapter<CreateTourPackageAdapter.MyViewHolder> {
@@ -31,7 +33,7 @@ public class CreateTourPackageAdapter extends RecyclerView.Adapter<CreateTourPac
     ClickListener clickListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name,description;
+        public TextView name,description,price;
         public ImageView imageView;
         public View v;
 
@@ -40,6 +42,7 @@ public class CreateTourPackageAdapter extends RecyclerView.Adapter<CreateTourPac
             imageView = (ImageView) view.findViewById(R.id.image);
             name = (TextView) view.findViewById(R.id.name);
             description = (TextView) view.findViewById(R.id.description);
+            price = (TextView) view.findViewById(R.id.price);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -104,7 +107,9 @@ public class CreateTourPackageAdapter extends RecyclerView.Adapter<CreateTourPac
                             .into(myViewHolder.imageView);
             }
             myViewHolder.name.setText(json.getString("name"));
-            myViewHolder.description.setText(json.getString("description"));
+            myViewHolder.description.setText((!json.getString("description").equals(""))?json.getString("description"):"-");
+            NumberFormat formatter = new DecimalFormat("#,###");
+            myViewHolder.price.setText("Rp. "+formatter.format(json.getInt("price")));
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -1,8 +1,11 @@
 package com.qreatiq.travelgo;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
@@ -53,6 +56,7 @@ public class PackageActivity extends AppCompatActivity {
     SharedPreferences user;
     String userID;
 
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,10 @@ public class PackageActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        dialog=new ProgressDialog(this);
+        dialog.setMessage("Loading");
+        dialog.show();
 
         recyclerView = (RecyclerView) findViewById(R.id.list);
         adapter=new PackageAdapter(array);
@@ -133,11 +141,13 @@ public class PackageActivity extends AppCompatActivity {
                         JSONObject json=new JSONObject();
                         json.put("location",package1.getString("location"));
                         json.put("date",package1.getString("start_date")+" - "+package1.getString("end_date"));
+                        json.put("approval",package1.getInt("approval"));
                         json.put("id",package1.getString("id"));
                         array.add(json);
                     }
 
                     adapter.notifyDataSetChanged();
+                    dialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

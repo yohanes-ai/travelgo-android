@@ -1,5 +1,6 @@
 package com.qreatiq.travelgo
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -69,6 +70,7 @@ class TourActivity : AppCompatActivity() {
     private var user: SharedPreferences? = null
     private var userID: String? = null
     private var editor: SharedPreferences.Editor? = null
+    var dialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +84,10 @@ class TourActivity : AppCompatActivity() {
 
         var extras: Intent = intent
         id=extras.getIntExtra("id",1)
+
+        dialog=ProgressDialog(this)
+        dialog!!.setMessage("Loading")
+        dialog!!.show()
 
         user = this.getSharedPreferences("user_id", Context.MODE_PRIVATE)
         userID = user!!.getString("user_id", "Data Not Found")
@@ -143,6 +149,7 @@ class TourActivity : AppCompatActivity() {
 
                     location!!.setText(response.getJSONObject("package").getString("tour"))
                     description!!.setText(response.getJSONObject("package").getString("address"))
+                    dialog!!.dismiss()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }
         ) {

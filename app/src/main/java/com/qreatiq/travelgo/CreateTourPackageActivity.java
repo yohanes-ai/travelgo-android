@@ -15,11 +15,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +41,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.qreatiq.travelgo.objects.NumberTextWatcher;
 import com.qreatiq.travelgo.utils.Constant;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
@@ -46,6 +51,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +74,14 @@ public class CreateTourPackageActivity extends AppCompatActivity {
     Bundle bundle;
 
     boolean flag=false;
+
+    View.OnFocusChangeListener listener=new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus)
+                hideKeyboard(v);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +107,7 @@ public class CreateTourPackageActivity extends AppCompatActivity {
             }
         });
 
+        final NumberFormat formatter = new DecimalFormat("#,###");
         prefs = getSharedPreferences("user_id", Context.MODE_PRIVATE);
         editor = prefs.edit();
 
@@ -126,6 +142,22 @@ public class CreateTourPackageActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
+        price.addTextChangedListener(new NumberTextWatcher(price, "#,###"));
+
+        CoordinatorLayout layout=(CoordinatorLayout) findViewById(R.id.layout);
+        layout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard(v);
+                return false;
+            }
+        });
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
@@ -152,7 +184,7 @@ public class CreateTourPackageActivity extends AppCompatActivity {
                 else {
                     json.put("name", name.getText().toString());
                     json.put("description", description.getText().toString());
-                    json.put("price", price.getText().toString());
+                    json.put("price", price.getText().toString().replace(".00","").replace(",",""));
                     json.put("image", "");
 
                     if (!image.equals("")) {
@@ -232,7 +264,7 @@ public class CreateTourPackageActivity extends AppCompatActivity {
 
     public String BitMapToString(Bitmap bitmap){
         ByteArrayOutputStream baos=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG,80, baos);
         byte [] b=baos.toByteArray();
         String temp=Base64.encodeToString(b, Base64.DEFAULT);
         return temp;

@@ -21,13 +21,14 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.MyViewHo
     ClickListener clickListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView location,date;
+        public TextView location,date,status;
         public View v;
 
         public MyViewHolder(View view,int i) {
             super(view);
             location = (TextView) view.findViewById(R.id.location);
             date = (TextView) view.findViewById(R.id.date);
+            status = (TextView) view.findViewById(R.id.status);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -63,6 +64,7 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.MyViewHo
         try {
             myViewHolder.location.setText(data.getString("location"));
             myViewHolder.date.setText(data.getString("date"));
+            myViewHolder.status.setText((data.getInt("approval")==0)?"Waiting for Approval":"");
         } catch (JSONException e) {
             e.printStackTrace();
         }

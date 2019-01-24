@@ -32,6 +32,8 @@
                 android:inputType="textEmailAddress"
                 android:ems="10"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/name"/>
         </LinearLayout>
 
@@ -53,6 +55,8 @@
                 android:inputType="textEmailAddress"
                 android:ems="10"
                 android:id="@+id/email"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:layout_weight="1"/>
         </LinearLayout>
 
@@ -74,6 +78,8 @@
                 android:inputType="textPassword"
                 android:ems="10"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/password"/>
         </LinearLayout>
 
@@ -95,6 +101,8 @@
                 android:inputType="textPassword"
                 android:layout_weight="1"
                 android:id="@+id/confirm_password"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:ems="10" />
         </LinearLayout>
         <LinearLayout
@@ -114,6 +122,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:text=""
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/phone"/>
         </LinearLayout>
 
@@ -136,6 +146,8 @@
                 android:inputType="textMultiLine"
                 android:ems="10"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/tour_name"/>
         </LinearLayout>
 
@@ -156,6 +168,8 @@
                 android:inputType="textPersonName"
                 android:layout_weight="1"
                 android:ems="10"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/tour_description" />
         </LinearLayout>
         <LinearLayout
@@ -179,6 +193,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:id="@+id/create_package"
+                android:visibility="gone"
                 style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue"
                 android:layout_weight="1"/>
         </LinearLayout>

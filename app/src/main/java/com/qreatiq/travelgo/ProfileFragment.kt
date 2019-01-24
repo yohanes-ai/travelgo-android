@@ -24,6 +24,7 @@ import org.json.JSONObject
 import java.util.HashMap
 import android.R.id.edit
 import android.app.Activity
+import android.app.ProgressDialog
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -70,6 +71,11 @@ class ProfileFragment : Fragment() {
     private var logout: Button? = null
     private var editor: SharedPreferences.Editor? = null
     private var history: LinearLayout? = null
+    internal var focusListener: View.OnFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+        if (!hasFocus)
+            hideKeyboard(v)
+    }
+    var dialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,11 +114,14 @@ class ProfileFragment : Fragment() {
         layout = view.findViewById(R.id.frameLayout3) as ConstraintLayout
         queue = Volley.newRequestQueue(activity)
         history = view.findViewById(R.id.history) as LinearLayout
+        dialog = ProgressDialog(activity)
+        dialog!!.setMessage("Loading..")
+        dialog!!.show()
 
         getData()
 
         save!!.setOnClickListener{
-            saveData()
+            saveData(it)
 //            name!!.setFocusable(false);
 //            email!!.setFocusable(false);
 //            password!!.setFocusable(false);
@@ -145,9 +154,9 @@ class ProfileFragment : Fragment() {
 
         }
 
-        layout!!.setOnTouchListener{ v, event ->
+        layout!!.setOnTouchListener { v, event ->
             hideKeyboard(v)
-            false
+            true
         }
 
         history!!.setOnClickListener {
@@ -169,10 +178,13 @@ class ProfileFragment : Fragment() {
                     name!!.setText(if(!response.getJSONObject("user").isNull("name")) response.getJSONObject("user").getString("name") else "")
                     email!!.setText(if(!response.getJSONObject("user").isNull("email")) response.getJSONObject("user").getString("email") else "")
                     phone!!.setText(if(!response.getJSONObject("user").isNull("phone")) response.getJSONObject("user").getString("phone") else "")
-                    if(!response.getJSONObject("user").isNull("name_tour"))
+                    if(!response.getJSONObject("user").isNull("name_tour")) {
+                        create_package!!.visibility=View.VISIBLE
                         tour_name!!.setText(response.getJSONObject("user").getString("name_tour"))
+                    }
                     if(!response.getJSONObject("user").isNull("description_tour"))
                         tour_description!!.setText(response.getJSONObject("user").getString("description_tour"))
+                    dialog!!.dismiss()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }
             ) {
@@ -192,7 +204,11 @@ class ProfileFragment : Fragment() {
     }
 
 
-    fun saveData(){
+    fun saveData(view: View){
+        hideKeyboard(view)
+        var dialog = ProgressDialog(activity)
+        dialog!!.setMessage("Saving...")
+        dialog.show()
         val url = Constant.C_URL+"saveProfile.php"
 
         val json = JSONObject()
@@ -204,11 +220,21 @@ class ProfileFragment : Fragment() {
         json.put("tour_description",tour_description!!.text.toString())
         json.put("id",userID)
 
+        Log.d("data",json.toString())
+
         val jsonObjectRequest = object :
             JsonObjectRequest(Request.Method.POST, url, json,
                 Response.Listener { response ->
-                    val snackbar = Snackbar.make(layout!!,"Profile Updated",Snackbar.LENGTH_LONG)
-                    snackbar.show()
+                    Log.d("data",response.toString())
+                    if(response.getString("status").equals("berhasil")) {
+                        val snackbar = Snackbar.make(layout!!, "Profile Updated", Snackbar.LENGTH_LONG)
+                        snackbar.show()
+                    }
+                    else{
+                        val snackbar = Snackbar.make(layout!!, response.getString("message"), Snackbar.LENGTH_LONG)
+                        snackbar.show()
+                    }
+                    dialog.dismiss()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }
             ) {

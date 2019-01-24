@@ -2,6 +2,7 @@ package com.qreatiq.travelgo
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -27,6 +28,7 @@ import com.android.volley.toolbox.Volley
 import com.qreatiq.travelgo.adapters.FindTourAdapter
 import com.qreatiq.travelgo.cards.SliderAdapter
 import com.qreatiq.travelgo.objects.FindTour
+import com.qreatiq.travelgo.utils.Constant
 import org.jetbrains.anko.support.v4.act
 import org.json.JSONObject
 import java.util.*
@@ -115,7 +117,7 @@ class FindTourFragment : Fragment() {
 //        val adapterSpinner = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, cities)
 //        spinner.adapter = adapterSpinner
 
-        val url = "https://3gomedia.com/travel-go/api/getPlaces.php"
+        val url = Constant.C_URL+"getPlaces.php"
 
         val jsonObjectRequest = object: JsonObjectRequest(
             Request.Method.GET, url, null, Response.Listener { response ->
@@ -156,13 +158,15 @@ class FindTourFragment : Fragment() {
         }
 
         date!!.setOnClickListener{
-            DatePickerDialog(
+            var dialog = DatePickerDialog(
                 activity,
                 myDateListener,
                 calendar!!.get(Calendar.YEAR),
                 calendar!!.get(Calendar.MONTH),
                 calendar!!.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            )
+            dialog.datePicker.minDate=System.currentTimeMillis() - 1000;
+            dialog.show()
         }
 
         return viewLayout
@@ -177,7 +181,8 @@ class FindTourFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                getData()
+                if(!date!!.text.toString().equals(""))
+                    getData()
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -187,7 +192,8 @@ class FindTourFragment : Fragment() {
 
         spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                getData()
+                if(!date!!.text.toString().equals(""))
+                    getData()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -204,7 +210,10 @@ class FindTourFragment : Fragment() {
     }
 
     fun getData(){
-        val url = "https://3gomedia.com/travel-go/api/getPackage.php"
+        var dialog = ProgressDialog(activity)
+        dialog!!.setMessage("Saving...")
+        dialog.show()
+        val url = Constant.C_URL+"getPackage.php"
 
         val json = JSONObject()
         json.put("location",cities.get(spinner.selectedItemPosition))
@@ -223,7 +232,7 @@ class FindTourFragment : Fragment() {
                     val adapter = FindTourAdapter(context!!, findTours)
                     listView.adapter = adapter
 
-
+                    dialog.dismiss()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }
             ) {
