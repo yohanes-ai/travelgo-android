@@ -24,6 +24,7 @@ import org.json.JSONObject
 import java.util.HashMap
 import android.R.id.edit
 import android.app.Activity
+import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -110,21 +111,21 @@ class ProfileFragment : Fragment() {
 
         getData()
 
-        save!!.setOnClickListener(View.OnClickListener {
+        save!!.setOnClickListener{
             saveData()
-            name!!.setFocusable(false);
-            email!!.setFocusable(false);
-            password!!.setFocusable(false);
-            confirm_password!!.setFocusable(false);
-            phone!!.setFocusable(false);
-            tour_name!!.setFocusable(false);
-            tour_description!!.setFocusable(false);
-        })
+//            name!!.setFocusable(false);
+//            email!!.setFocusable(false);
+//            password!!.setFocusable(false);
+//            confirm_password!!.setFocusable(false);
+//            phone!!.setFocusable(false);
+//            tour_name!!.setFocusable(false);
+//            tour_description!!.setFocusable(false);
+        }
 
-        create_package!!.setOnClickListener(View.OnClickListener {
+        create_package!!.setOnClickListener{
             val `in` = Intent(activity, PackageActivity::class.java)
             startActivity(`in`)
-        })
+        }
 
         logout = view!!.findViewById(R.id.logoutBtn) as Button
 
@@ -142,6 +143,11 @@ class ProfileFragment : Fragment() {
             activity!!.finish()
             startActivity(intent)
 
+        }
+
+        layout!!.setOnTouchListener{ v, event ->
+            hideKeyboard(v)
+            false
         }
 
         history!!.setOnClickListener {
@@ -178,6 +184,11 @@ class ProfileFragment : Fragment() {
             }
         }
         queue!!.add(jsonObjectRequest)
+    }
+
+    fun hideKeyboard(view: View) {
+        val inputMethodManager = activity!!.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
 

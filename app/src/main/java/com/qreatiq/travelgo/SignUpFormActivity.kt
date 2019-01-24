@@ -158,6 +158,8 @@ class SignUpFormActivity : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 }
+                else
+                    Toast.makeText(this,"Email already exists",Toast.LENGTH_LONG).show()
             },
                 Response.ErrorListener { error -> Log.e("error", error.message) })
             {

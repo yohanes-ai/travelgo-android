@@ -110,6 +110,7 @@ class LoginFormActivity : AppCompatActivity() {
 
 				val intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+				finish()
 				startActivity(intent)
 			}
 		},
@@ -160,6 +161,7 @@ class LoginFormActivity : AppCompatActivity() {
 
 						val intent = Intent(this, MainActivity::class.java)
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+						finish()
 						startActivity(intent)
 					} else {
 						Toast.makeText(this, "Email / Password Wrong!", Toast.LENGTH_LONG).show()
