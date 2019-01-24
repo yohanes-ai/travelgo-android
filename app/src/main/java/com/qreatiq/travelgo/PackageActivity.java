@@ -86,8 +86,6 @@ public class PackageActivity extends AppCompatActivity {
 
         queue = Volley.newRequestQueue(this);
 
-        getData();
-
         FloatingActionButton fab = findViewById(R.id.addPackage);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +108,12 @@ public class PackageActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        array.clear();
+        getData();
+    }
 
     private void getData(){
         String url = Constant.Companion.getC_URL()+"getPackageUser.php?id="+userID;

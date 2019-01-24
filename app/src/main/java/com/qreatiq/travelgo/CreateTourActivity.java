@@ -249,6 +249,10 @@ public class CreateTourActivity extends AppCompatActivity {
                 Snackbar snackbar=Snackbar.make(layout,"End Date is empty",Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
+            else if(array1.size()>0) {
+                Snackbar snackbar=Snackbar.make(layout,"Minimal 1 Tour Package",Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
             else
                 saveData();
             return true;
@@ -291,7 +295,7 @@ public class CreateTourActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        logLargeString(json.toString());
+//        logLargeString(json.toString());
 
 
         String url = Constant.Companion.getC_URL()+"savePackage.php";

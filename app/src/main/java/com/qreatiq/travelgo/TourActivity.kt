@@ -132,7 +132,7 @@ class TourActivity : AppCompatActivity() {
                         packageTours.add(PackageTour(
                                 data.getInt("id"),
                                 data.getString("name"),
-                                "",
+                            Constant.C_URL_IMAGES + "tour_pack/" + data.getString("url_photo"),
                                 data.getInt("price"),
                                 data.getString("description")
                         ))
