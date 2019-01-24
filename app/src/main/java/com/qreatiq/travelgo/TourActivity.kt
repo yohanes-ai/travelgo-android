@@ -132,7 +132,7 @@ class TourActivity : AppCompatActivity() {
                         packageTours.add(PackageTour(
                                 data.getInt("id"),
                                 data.getString("name"),
-                            Constant.C_URL_IMAGES + "tour_pack/" + data.getString("url_photo"),
+                                "",
                                 data.getInt("price"),
                                 data.getString("description")
                         ))
@@ -165,12 +165,14 @@ class TourActivity : AppCompatActivity() {
         val jsonObject1 = JSONObject()
         val jsonArray = JSONArray()
         val arrayList = ArrayList<JSONObject>()
+        var jumlahOrang: Int = 0
         for(packageTour in packageTours){
             val jsonObject = JSONObject()
             totalBayar += packageTour.qty * packageTour.price!!
             jsonObject.put("tourpack", packageTour.id)
             jsonObject.put("jumlahOrang", packageTour.qty)
             jsonObject.put("total", packageTour.qty * packageTour.price!!)
+            jumlahOrang += packageTour.qty
             arrayList.add(jsonObject)
         }
 
@@ -186,10 +188,6 @@ class TourActivity : AppCompatActivity() {
             JsonObjectRequest(Request.Method.POST, url, jsonObject1,
                 Response.Listener { response ->
                     Log.d("paket", response.toString())
-                    alert("Total yang harus dibayarkan Rp " + format.format(totalBayar),"Konfirmasi Pembayaran") {
-                        positiveButton("Bayar Paket") { toast("Paket berhasil dimasukan ke keranjang") }
-                        negativeButton("Tutup") { }
-                    }.show()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }
             ) {
@@ -200,7 +198,18 @@ class TourActivity : AppCompatActivity() {
                 return headers
             }
         }
-        queue!!.add(jsonObjectRequest)
 
+        if(!jumlahOrang.equals(0)){
+            alert("Total yang harus dibayarkan Rp " + format.format(totalBayar),"Konfirmasi Pembayaran") {
+                positiveButton("Bayar Paket") {
+                    toast("Paket berhasil dimasukan ke keranjang")
+                    queue!!.add(jsonObjectRequest) }
+                negativeButton("Tutup") { }
+            }.show()
+        }
+        else
+            alert("Jumlah Orang tidak Boleh Kosong","Jumlah Orang") {
+                negativeButton("Tutup") { }
+            }.show()
     }
 }
