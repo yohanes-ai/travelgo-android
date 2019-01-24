@@ -1,6 +1,8 @@
 package com.qreatiq.travelgo;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -8,19 +10,39 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.qreatiq.travelgo.objects.NumberTextWatcher;
+import com.qreatiq.travelgo.utils.Constant;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -29,6 +51,10 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateTourPackageActivity extends AppCompatActivity {
 
@@ -44,7 +70,18 @@ public class CreateTourPackageActivity extends AppCompatActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
+    LinearLayout deleteContainer;
+    Bundle bundle;
+
     boolean flag=false;
+
+    View.OnFocusChangeListener listener=new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus)
+                hideKeyboard(v);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +92,7 @@ public class CreateTourPackageActivity extends AppCompatActivity {
         name = (EditText) findViewById(R.id.name);
         description = (EditText) findViewById(R.id.description);
         price = (EditText) findViewById(R.id.price);
+        deleteContainer = (LinearLayout) findViewById(R.id.deleteContainer);
 
         Toolbar toolbar=(Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,12 +107,14 @@ public class CreateTourPackageActivity extends AppCompatActivity {
             }
         });
 
+        final NumberFormat formatter = new DecimalFormat("#,###");
         prefs = getSharedPreferences("user_id", Context.MODE_PRIVATE);
         editor = prefs.edit();
 
-        Bundle bundle=getIntent().getExtras();
+        bundle=getIntent().getExtras();
         if(bundle!=null){
             setTitle("Edit Tour Package");
+            deleteContainer.setVisibility(View.VISIBLE);
             try {
                 json=new JSONObject(prefs.getString("tour_package","{}"));
                 Log.d("data",json.toString());
@@ -102,6 +142,22 @@ public class CreateTourPackageActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
+        price.addTextChangedListener(new NumberTextWatcher(price, "#,###"));
+
+        CoordinatorLayout layout=(CoordinatorLayout) findViewById(R.id.layout);
+        layout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard(v);
+                return false;
+            }
+        });
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
@@ -116,18 +172,30 @@ public class CreateTourPackageActivity extends AppCompatActivity {
 
         if (id == R.id.submit) {
             try {
-                json.put("name",name.getText().toString());
-                json.put("description",description.getText().toString());
-                json.put("price",price.getText().toString());
-                json.put("image","");
-
-                if(!image.equals("")) {
-                    editor.putString("image", image);
-                    editor.commit();
+                CoordinatorLayout layout=(CoordinatorLayout) findViewById(R.id.layout);
+                if(name.getText().toString().isEmpty()) {
+                    Snackbar snackbar=Snackbar.make(layout,"Name is empty",Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
-                flag=true;
+                else if(price.getText().toString().isEmpty()) {
+                    Snackbar snackbar=Snackbar.make(layout,"End Date is empty",Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+                else {
+                    json.put("name", name.getText().toString());
+                    json.put("description", description.getText().toString());
+                    json.put("price", price.getText().toString().replace(".00","").replace(",",""));
+                    json.put("image", "");
 
-                onBackPressed();
+                    if (!image.equals("")) {
+                        editor.putString("image", image);
+                        editor.commit();
+                    } else
+                        json.put("link", false);
+                    flag = true;
+
+                    onBackPressed();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -150,6 +218,32 @@ public class CreateTourPackageActivity extends AppCompatActivity {
             super.onBackPressed();
     }
 
+    public void deletePackage(View v){
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setMessage("Are You Sure?")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent();
+                        intent.putExtra("delete", true);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                        // Do stuff if user accepts
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        // Do stuff when user neglects.
+                    }
+                })
+                .create();
+        dialog.show();
+
+    }
+
     public void addMedia(View v){
         bottomSheetDialog=new BottomSheetDialog(this);
         View view = View.inflate(this, R.layout.list_attach_item, null);
@@ -170,7 +264,7 @@ public class CreateTourPackageActivity extends AppCompatActivity {
 
     public String BitMapToString(Bitmap bitmap){
         ByteArrayOutputStream baos=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG,80, baos);
         byte [] b=baos.toByteArray();
         String temp=Base64.encodeToString(b, Base64.DEFAULT);
         return temp;

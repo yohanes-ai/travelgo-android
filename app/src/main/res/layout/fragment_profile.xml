@@ -32,6 +32,8 @@
                 android:inputType="textEmailAddress"
                 android:ems="10"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/name"/>
         </LinearLayout>
 
@@ -53,6 +55,8 @@
                 android:inputType="textEmailAddress"
                 android:ems="10"
                 android:id="@+id/email"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:layout_weight="1"/>
         </LinearLayout>
 
@@ -74,6 +78,8 @@
                 android:inputType="textPassword"
                 android:ems="10"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/password"/>
         </LinearLayout>
 
@@ -95,6 +101,8 @@
                 android:inputType="textPassword"
                 android:layout_weight="1"
                 android:id="@+id/confirm_password"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:ems="10" />
         </LinearLayout>
         <LinearLayout
@@ -113,6 +121,9 @@
                 android:inputType="phone"
                 android:layout_weight="1"
                 android:ems="10"
+                android:text=""
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/phone"/>
         </LinearLayout>
 
@@ -135,6 +146,8 @@
                 android:inputType="textMultiLine"
                 android:ems="10"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/tour_name"/>
         </LinearLayout>
 
@@ -155,6 +168,8 @@
                 android:inputType="textPersonName"
                 android:layout_weight="1"
                 android:ems="10"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/tour_description" />
         </LinearLayout>
         <LinearLayout
@@ -173,15 +188,35 @@
                 android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"/>
             <Button
-                android:text="Create Package"
+                android:text="List Package"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:id="@+id/create_package"
+                android:visibility="gone"
                 style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue"
                 android:layout_weight="1"/>
-
         </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:background="@drawable/border"
+        android:id="@+id/history"
+        app:layout_constraintTop_toBottomOf="@+id/profileLayout">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="History Transaksi"/>
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
     </LinearLayout>
 
 

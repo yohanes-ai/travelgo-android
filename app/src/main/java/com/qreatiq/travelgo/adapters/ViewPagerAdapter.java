@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.qreatiq.travelgo.R;
+import com.qreatiq.travelgo.utils.Constant;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -34,8 +35,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         LayoutInflater layoutInflater  = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.list_carousel_item, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.imageCarousel);
-        Log.d("images", "https://3gomedia.com/travel-go/images/location/"+images.get(position));
-        Picasso.get().load("https://3gomedia.com/travel-go/images/location/"+images.get(position)).into(imageView);
+        Picasso.get().load(Constant.Companion.getC_URL_IMAGES()+"location/"+images.get(position)).into(imageView);
         ViewPager viewPager = (ViewPager) container;
         viewPager.addView(view, 0);
         return view;

@@ -9,6 +9,7 @@ import android.widget.*;
 import com.android.volley.*;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.qreatiq.travelgo.utils.Constant;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,7 +56,7 @@ public class CreatePackage extends AppCompatActivity {
     }
 
     private void getLocationData(){
-        url = "https://3gomedia.com/travel-go/api/getLocation.php";
+        url = Constant.Companion.getC_URL()+"getLocation.php";
 
         JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, url, null
                 , new Response.Listener<JSONObject>() {

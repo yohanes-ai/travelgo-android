@@ -24,7 +24,11 @@ import org.json.JSONObject
 import java.util.HashMap
 import android.R.id.edit
 import android.app.Activity
+import android.app.ProgressDialog
+import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.facebook.AccessToken
 import com.facebook.FacebookSdk
 import com.facebook.FacebookSdk.getApplicationContext
@@ -66,6 +70,12 @@ class ProfileFragment : Fragment() {
     private var userID: String? = null
     private var logout: Button? = null
     private var editor: SharedPreferences.Editor? = null
+    private var history: LinearLayout? = null
+    internal var focusListener: View.OnFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+        if (!hasFocus)
+            hideKeyboard(v)
+    }
+    var dialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +95,7 @@ class ProfileFragment : Fragment() {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
@@ -102,24 +113,28 @@ class ProfileFragment : Fragment() {
         create_package = view.findViewById(R.id.create_package) as Button
         layout = view.findViewById(R.id.frameLayout3) as ConstraintLayout
         queue = Volley.newRequestQueue(activity)
+        history = view.findViewById(R.id.history) as LinearLayout
+        dialog = ProgressDialog(activity)
+        dialog!!.setMessage("Loading..")
+        dialog!!.show()
 
         getData()
 
-        save!!.setOnClickListener(View.OnClickListener {
-            saveData()
-            name!!.setFocusable(false);
-            email!!.setFocusable(false);
-            password!!.setFocusable(false);
-            confirm_password!!.setFocusable(false);
-            phone!!.setFocusable(false);
-            tour_name!!.setFocusable(false);
-            tour_description!!.setFocusable(false);
-        })
+        save!!.setOnClickListener{
+            saveData(it)
+//            name!!.setFocusable(false);
+//            email!!.setFocusable(false);
+//            password!!.setFocusable(false);
+//            confirm_password!!.setFocusable(false);
+//            phone!!.setFocusable(false);
+//            tour_name!!.setFocusable(false);
+//            tour_description!!.setFocusable(false);
+        }
 
-        create_package!!.setOnClickListener(View.OnClickListener {
+        create_package!!.setOnClickListener{
             val `in` = Intent(activity, PackageActivity::class.java)
             startActivity(`in`)
-        })
+        }
 
         logout = view!!.findViewById(R.id.logoutBtn) as Button
 
@@ -134,13 +149,23 @@ class ProfileFragment : Fragment() {
 
             val intent = Intent(activity, LoginMenuActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            activity!!.finish()
             startActivity(intent)
 
+        }
+
+        layout!!.setOnTouchListener { v, event ->
+            hideKeyboard(v)
+            true
+        }
+
+        history!!.setOnClickListener {
+            startActivity(Intent(activity,HistoryTransactionActivity::class.java))
         }
     }
 
     fun getData(){
-        val url = Constant.C_URL + "profile.php"
+        val url = Constant.C_URL+"profile.php"
 
         val jsonObject = JSONObject()
         jsonObject.put("id",userID)
@@ -149,13 +174,17 @@ class ProfileFragment : Fragment() {
             JsonObjectRequest(Request.Method.POST, url, jsonObject,
                 Response.Listener { response ->
 
-                    name!!.setText(response.getJSONObject("user").getString("name"))
-                    email!!.setText(response.getJSONObject("user").getString("email"))
-                    phone!!.setText(response.getJSONObject("user").getString("phone"))
-                    if(!response.getJSONObject("user").isNull("name_tour"))
+
+                    name!!.setText(if(!response.getJSONObject("user").isNull("name")) response.getJSONObject("user").getString("name") else "")
+                    email!!.setText(if(!response.getJSONObject("user").isNull("email")) response.getJSONObject("user").getString("email") else "")
+                    phone!!.setText(if(!response.getJSONObject("user").isNull("phone")) response.getJSONObject("user").getString("phone") else "")
+                    if(!response.getJSONObject("user").isNull("name_tour")) {
+                        create_package!!.visibility=View.VISIBLE
                         tour_name!!.setText(response.getJSONObject("user").getString("name_tour"))
+                    }
                     if(!response.getJSONObject("user").isNull("description_tour"))
                         tour_description!!.setText(response.getJSONObject("user").getString("description_tour"))
+                    dialog!!.dismiss()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }
             ) {
@@ -169,9 +198,18 @@ class ProfileFragment : Fragment() {
         queue!!.add(jsonObjectRequest)
     }
 
+    fun hideKeyboard(view: View) {
+        val inputMethodManager = activity!!.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 
-    fun saveData(){
-        val url = "https://3gomedia.com/travel-go/api/saveProfile.php"
+
+    fun saveData(view: View){
+        hideKeyboard(view)
+        var dialog = ProgressDialog(activity)
+        dialog!!.setMessage("Saving...")
+        dialog.show()
+        val url = Constant.C_URL+"saveProfile.php"
 
         val json = JSONObject()
         json.put("name",name!!.text.toString())
@@ -182,11 +220,21 @@ class ProfileFragment : Fragment() {
         json.put("tour_description",tour_description!!.text.toString())
         json.put("id",userID)
 
+        Log.d("data",json.toString())
+
         val jsonObjectRequest = object :
             JsonObjectRequest(Request.Method.POST, url, json,
                 Response.Listener { response ->
-                    val snackbar = Snackbar.make(layout!!,"Profile Updated",Snackbar.LENGTH_LONG)
-                    snackbar.show()
+                    Log.d("data",response.toString())
+                    if(response.getString("status").equals("berhasil")) {
+                        val snackbar = Snackbar.make(layout!!, "Profile Updated", Snackbar.LENGTH_LONG)
+                        snackbar.show()
+                    }
+                    else{
+                        val snackbar = Snackbar.make(layout!!, response.getString("message"), Snackbar.LENGTH_LONG)
+                        snackbar.show()
+                    }
+                    dialog.dismiss()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }
             ) {

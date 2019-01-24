@@ -26,11 +26,14 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.android.volley.*;
@@ -76,8 +79,9 @@ public class CreateTourActivity extends AppCompatActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     Bundle bundle;
+    LinearLayout deleteContainer;
 
-    int CREATE_TOUR=3,EDIT_TOUR=4,pos=0;
+    int CREATE_TOUR=3,EDIT_TOUR=4,pos=0,DELETE_TOUR=5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +105,15 @@ public class CreateTourActivity extends AppCompatActivity {
         start=(EditText) findViewById(R.id.start_date);
         end=(EditText) findViewById(R.id.end_date);
         location=(Spinner) findViewById(R.id.location);
+        deleteContainer = (LinearLayout) findViewById(R.id.deleteContainer);
         queue = Volley.newRequestQueue(this);
         prefs = getSharedPreferences("user_id", Context.MODE_PRIVATE);
         editor = prefs.edit();
 
-        if(!bundle.isEmpty())
+        if(!bundle.getString("id","").equals("")) {
+            deleteContainer.setVisibility(View.VISIBLE);
             setTitle("Edit Package");
+        }
 
         getLocation();
 
@@ -187,6 +194,11 @@ public class CreateTourActivity extends AppCompatActivity {
         });
     }
 
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -197,6 +209,28 @@ public class CreateTourActivity extends AppCompatActivity {
             editor.commit();
             in.putExtra("id",pos);
             startActivityForResult(in,EDIT_TOUR);
+            return true;
+        }
+        else if (id == 2) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setMessage("Are You Sure?")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            array1.remove(pos);
+                            adapter1.notifyItemRemoved(pos);
+                            // Do stuff if user accepts
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            // Do stuff when user neglects.
+                        }
+                    })
+                    .create();
+            dialog.show();
             return true;
         }
         return super.onContextItemSelected(item);
@@ -213,7 +247,21 @@ public class CreateTourActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.submit) {
-            saveData();
+            CoordinatorLayout layout=(CoordinatorLayout) findViewById(R.id.layout);
+            if(start.getText().toString().isEmpty()) {
+                Snackbar snackbar=Snackbar.make(layout,"Start Date is empty",Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+            else if(end.getText().toString().isEmpty()) {
+                Snackbar snackbar=Snackbar.make(layout,"End Date is empty",Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+            else if(array1.size()==0) {
+                Snackbar snackbar=Snackbar.make(layout,"Minimal 1 Tour Package",Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+            else
+                saveData();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -254,7 +302,7 @@ public class CreateTourActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        logLargeString(json.toString());
+//        logLargeString(json.toString());
 
 
         String url = Constant.Companion.getC_URL()+"savePackage.php";
@@ -450,7 +498,7 @@ public class CreateTourActivity extends AppCompatActivity {
                     location.setAdapter(adapter);
 
 
-                    if(!bundle.isEmpty()){
+                    if(!bundle.getString("id","").equals("")){
                         getData(bundle.getString("id"));
                     }
                 } catch (JSONException e) {
@@ -592,13 +640,19 @@ public class CreateTourActivity extends AppCompatActivity {
             }
             else if(requestCode==EDIT_TOUR){
                 try {
-                    JSONObject json = new JSONObject(data.getStringExtra("tour_package"));
-                    json.put("image",prefs.getString("image",""));
-                    array1.set(pos,json);
-                    adapter1.notifyItemChanged(pos);
+                    if(!data.getBooleanExtra("delete",false)) {
+                        JSONObject json = new JSONObject(data.getStringExtra("tour_package"));
+                        json.put("image", prefs.getString("image", ""));
+                        array1.set(pos, json);
+                        adapter1.notifyItemChanged(pos);
 
-                    editor.remove("image");
-                    editor.commit();
+                        editor.remove("image");
+                        editor.commit();
+                    }
+                    else{
+                        array1.remove(pos);
+                        adapter1.notifyItemRemoved(pos);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

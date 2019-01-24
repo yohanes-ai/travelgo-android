@@ -1,7 +1,9 @@
 package com.qreatiq.travelgo
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -30,10 +32,12 @@ import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.toast
+import org.json.JSONArray
 import org.json.JSONObject
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,6 +67,11 @@ class TourActivity : AppCompatActivity() {
     private var description: TextView? = null
     private var context: Context = this
 
+    private var user: SharedPreferences? = null
+    private var userID: String? = null
+    private var editor: SharedPreferences.Editor? = null
+    var dialog: ProgressDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_tour)
@@ -76,6 +85,12 @@ class TourActivity : AppCompatActivity() {
         var extras: Intent = intent
         id=extras.getIntExtra("id",1)
 
+        dialog=ProgressDialog(this)
+        dialog!!.setMessage("Loading")
+        dialog!!.show()
+
+        user = this.getSharedPreferences("user_id", Context.MODE_PRIVATE)
+        userID = user!!.getString("user_id", "Data Not Found")
 
         getData()
 
@@ -89,16 +104,7 @@ class TourActivity : AppCompatActivity() {
 
 
         button!!.setOnClickListener{
-            val format = DecimalFormat("#,###")
-            var totalBayar : Int = 0
-            for(packageTour in packageTours){
-                totalBayar += packageTour.qty * packageTour.price!!
-            }
-
-            alert("Total yang harus dibayarkan Rp " + format.format(totalBayar),"Konfirmasi Pembayaran") {
-                positiveButton("Bayar Paket") { toast("Paket berhasil dimasukan ke keranjang") }
-                negativeButton("Tutup") { }
-            }.show()
+            postBooking()
         }
 
         listView!!.setItemsCanFocus(true)
@@ -143,6 +149,7 @@ class TourActivity : AppCompatActivity() {
 
                     location!!.setText(response.getJSONObject("package").getString("tour"))
                     description!!.setText(response.getJSONObject("package").getString("address"))
+                    dialog!!.dismiss()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }
         ) {
@@ -154,5 +161,62 @@ class TourActivity : AppCompatActivity() {
             }
         }
         queue!!.add(jsonObjectRequest)
+    }
+
+    fun postBooking(){
+
+        val url = Constant.C_URL + "postBooking.php"
+
+        val format = DecimalFormat("#,###")
+        var totalBayar : Int = 0
+        val jsonObject1 = JSONObject()
+        val jsonArray = JSONArray()
+        val arrayList = ArrayList<JSONObject>()
+        var jumlahOrang: Int = 0
+        for(packageTour in packageTours){
+            val jsonObject = JSONObject()
+            totalBayar += packageTour.qty * packageTour.price!!
+            jsonObject.put("tourpack", packageTour.id)
+            jsonObject.put("jumlahOrang", packageTour.qty)
+            jsonObject.put("total", packageTour.qty * packageTour.price!!)
+            jumlahOrang += packageTour.qty
+            arrayList.add(jsonObject)
+        }
+
+        for(x in 0..arrayList.size-1){
+            jsonArray.put(x, arrayList.get(x))
+        }
+        jsonObject1.put("detail", jsonArray)
+
+        jsonObject1.put("totalInvoice", totalBayar)
+        jsonObject1.put("user", userID)
+
+        val jsonObjectRequest = object :
+            JsonObjectRequest(Request.Method.POST, url, jsonObject1,
+                Response.Listener { response ->
+                    Log.d("paket", response.toString())
+                },
+                Response.ErrorListener { error -> Log.e("error", error.message) }
+            ) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Content-Type"] = "application/json"
+                return headers
+            }
+        }
+
+        if(!jumlahOrang.equals(0)){
+            alert("Total yang harus dibayarkan Rp " + format.format(totalBayar),"Konfirmasi Pembayaran") {
+                positiveButton("Bayar Paket") {
+                    toast("Paket berhasil dimasukan ke keranjang")
+                    queue!!.add(jsonObjectRequest) }
+                negativeButton("Tutup") { }
+            }.show()
+        }
+        else
+            alert("Jumlah Orang tidak Boleh Kosong","Jumlah Orang") {
+                negativeButton("Tutup") { }
+            }.show()
     }
 }

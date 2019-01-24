@@ -5,6 +5,7 @@
 
     <ImageView android:layout_width="match_parent" android:layout_height="242dp"
         android:id="@+id/imageCarousel"
+        android:scaleType="centerCrop"
     />
 
 </android.support.constraint.ConstraintLayout>

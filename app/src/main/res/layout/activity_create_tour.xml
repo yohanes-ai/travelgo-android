@@ -113,6 +113,8 @@
         app:layout_behavior="@string/bottom_sheet_behavior"
         android:padding="10dp"
         android:onClick="deletePackage"
+        android:visibility="gone"
+        android:id="@+id/deleteContainer"
         android:background="#ff0000">
         <TextView
             android:layout_width="match_parent"
