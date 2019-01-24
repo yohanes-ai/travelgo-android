@@ -94,7 +94,7 @@ class LoginFormActivity : AppCompatActivity() {
             e.printStackTrace()
         }
 
-        val url = Constant.C_URL + "login.php"
+		val url = Constant.C_URL + "login.php"
 
 		var jsonObject = JSONObject()
 		jsonObject.put("email", email)
@@ -132,50 +132,50 @@ class LoginFormActivity : AppCompatActivity() {
 	}
 
 	fun goToMain(v : View){
-		var emailInput = findViewById<EditText>(R.id.editText3)
-		var passwordInput = findViewById<EditText>(R.id.editText4)
+		var emailInput = findViewById<View>(R.id.editText3) as EditText
+		var passwordInput = findViewById<View>(R.id.editText4) as EditText
 
-        if(emailInput.text.isEmpty()){
-            editText3.setError("Please fill username")
-        }else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(emailInput.text).matches()){
-            editText3.setError("Please input valid email")
-        }else if(passwordInput.text.isEmpty()){
-            editText4.setError("Please fill password")
-        }else{
-            val url = Constant.C_URL + "login.php"
+		if(emailInput.text.isEmpty()){
+			editText3.setError("Please fill username")
+		}else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(emailInput.text).matches()){
+			editText3.setError("Please input valid email")
+		}else if(passwordInput.text.isEmpty()){
+			editText4.setError("Please fill password")
+		}else {
+			val url = Constant.C_URL + "login.php"
 
-            var jsonObject = JSONObject()
-            jsonObject.put("email", emailInput.text)
-            jsonObject.put("password", passwordInput.text)
+			var jsonObject = JSONObject()
+			jsonObject.put("email", emailInput!!.text.toString())
+			jsonObject.put("password", passwordInput!!.text.toString())
 
-            var jsonObjectRequest : JsonObjectRequest? = null;
-            jsonObjectRequest = object:JsonObjectRequest(Request.Method.POST, url, jsonObject, Response.Listener { response ->
-                if(response.getString("status").equals("success")){
-                    saveLogin = getSharedPreferences("user_id", Context.MODE_PRIVATE)
-                    editor = saveLogin!!.edit()
-                    editor!!.putString("user_id", response.getString("data"))
-                    editor!!.apply()
 
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                }
-                else{
-                    Toast.makeText(this, "Email / Password Wrong!", Toast.LENGTH_LONG).show()
-                }
-            },
-                Response.ErrorListener { error -> Log.e("error", "error" + error.message ) })
-            {
-                @Throws(AuthFailureError::class)
-                override fun getHeaders(): Map<String, String> {
-                    val header = HashMap<String, String>()
-                    header ["Content-Type"] = "application/json"
-                    return header
-                }
-            }
+			val jsonObjectRequest =
+				object : JsonObjectRequest(Request.Method.POST, url, jsonObject, Response.Listener { response ->
+					Log.d("data123", response.toString())
+					if (response.getString("status").equals("success")) {
+						saveLogin = getSharedPreferences("user_id", Context.MODE_PRIVATE)
+						editor = saveLogin!!.edit()
+						editor!!.putString("user_id", response.getString("data"))
+						editor!!.apply()
 
-            queue!!.add(jsonObjectRequest)
-        }
+						val intent = Intent(this, MainActivity::class.java)
+						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+						startActivity(intent)
+					} else {
+						Toast.makeText(this, "Email / Password Wrong!", Toast.LENGTH_LONG).show()
+					}
+				},
+					Response.ErrorListener { error -> Log.e("error", error.message) }) {
+					@Throws(AuthFailureError::class)
+					override fun getHeaders(): Map<String, String> {
+						val header = HashMap<String, String>()
+						header["Content-Type"] = "application/json"
+						return header
+					}
+				}
+
+			queue!!.add(jsonObjectRequest)
+		}
 	}
 
 	fun hideKeyboard(view: View) {

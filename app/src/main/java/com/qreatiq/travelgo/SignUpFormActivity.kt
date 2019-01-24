@@ -159,7 +159,7 @@ class SignUpFormActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             },
-                Response.ErrorListener { error -> Log.e("error123", "error235" + error.message) })
+                Response.ErrorListener { error -> Log.e("error", error.message) })
             {
                 @Throws(AuthFailureError::class)
                 override fun getHeaders(): Map<String, String> {

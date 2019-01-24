@@ -26,11 +26,16 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.NoCache
 import com.android.volley.toolbox.Volley
 import com.qreatiq.travelgo.cards.SliderAdapter
+import com.qreatiq.travelgo.utils.Constant
 import com.qreatiq.travelgo.utils.DecodeBitmapTask
 import com.ramotion.cardslider.CardSliderLayoutManager
 import com.ramotion.cardslider.CardSnapHelper
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -59,18 +64,19 @@ class HomeFragment : Fragment() {
 	private var queue: RequestQueue? = null
 
 	private val dotCoords = Array(5) { IntArray(2) }
-	private val pics = intArrayOf(R.drawable.p6, R.drawable.p6, R.drawable.p6, R.drawable.p6, R.drawable.p6)
-	private val maps = intArrayOf(
-		R.drawable.map_bali,
-		R.drawable.map_bali,
-		R.drawable.map_bali,
-		R.drawable.map_bali,
-		R.drawable.map_bali
-	)
+	private val pics = arrayListOf<String>()
+	private val maps = ArrayList<String>()
+//	private val maps = intArrayOf(
+//		R.drawable.map_bali,
+//		R.drawable.map_bali,
+//		R.drawable.map_bali,
+//		R.drawable.map_bali,
+//		R.drawable.map_bali
+//	)
 
 	private var descriptions = arrayListOf<String>("")
 	private val countries = arrayOf("Indonesia", "Indonesia", "Indonesia", "Indonesia", "Indonesia")
-	private var places = arrayListOf<String>("Bali", "Bali", "Bali", "Bali", "Bali")
+	private var places = arrayListOf<String>("")
 	private val temperatures = arrayOf("4.1", "4.1", "4.1", "4.1", "4.1")
 	private val times =
 		arrayOf("Aug 1 - Dec 15", "Aug 1 - Dec 15", "Aug 1 - Dec 15")
@@ -79,11 +85,11 @@ class HomeFragment : Fragment() {
 
 	private lateinit var layoutManger: CardSliderLayoutManager
 	private lateinit var recyclerView: RecyclerView
-	private lateinit var mapSwitcher: ImageSwitcher
+	private lateinit var mapSwitcher: ImageView
 	private lateinit var temperatureSwitcher: TextSwitcher
 	private lateinit var placeSwitcher: TextSwitcher
 	private lateinit var clockSwitcher: TextSwitcher
-	private lateinit var descriptionsSwitcher: TextSwitcher
+	private lateinit var descriptionsSwitcher: TextView
 	private lateinit var greenDot: View
 
 	private lateinit var viewOfLayout: View
@@ -121,9 +127,6 @@ class HomeFragment : Fragment() {
 
 		initRecyclerView()
 		initCountryText()
-		initSwitchers()
-		initGreenDot()
-
 
 
 		return viewOfLayout
@@ -223,24 +226,31 @@ class HomeFragment : Fragment() {
 		clockSwitcher.setFactory(TextViewFactory(R.style.ClockTextView, false))
 		clockSwitcher.setCurrentText(times[0])
 
-		descriptionsSwitcher = viewOfLayout.findViewById(R.id.ts_description) as TextSwitcher
-		descriptionsSwitcher.setInAnimation(context, android.R.anim.fade_in)
-		descriptionsSwitcher.setOutAnimation(context, android.R.anim.fade_out)
-		descriptionsSwitcher.setFactory(TextViewFactory(R.style.DescriptionTextView, false))
-		descriptionsSwitcher.setCurrentText((descriptions[0]))
+		descriptionsSwitcher = viewOfLayout.findViewById(R.id.ts_description) as TextView
+//		descriptionsSwitcher.setInAnimation(context, android.R.anim.fade_in)
+//		descriptionsSwitcher.setOutAnimation(context, android.R.anim.fade_out)
+//		descriptionsSwitcher.setFactory(TextViewFactory(R.style.DescriptionTextView, false))
+//		descriptionsSwitcher.setCurrentText((descriptions[0]))
+		descriptionsSwitcher.setText(descriptions[0])
 
-		mapSwitcher = viewOfLayout.findViewById(R.id.ts_map) as ImageSwitcher
-		mapSwitcher.setInAnimation(context, R.anim.fade_in)
-		mapSwitcher.setOutAnimation(context, R.anim.fade_out)
-		mapSwitcher.setFactory(ImageViewFactory())
-		mapSwitcher.setImageResource(maps[0])
+		mapSwitcher = viewOfLayout.findViewById(R.id.ts_map) as ImageView
+		Picasso
+			.get()
+			.load(maps.get(0))
+			.networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
+			.memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+			.into(mapSwitcher)
+//		mapSwitcher.setInAnimation(context, R.anim.fade_in)
+//		mapSwitcher.setOutAnimation(context, R.anim.fade_out)
+//		mapSwitcher.setFactory(ImageViewFactory())
+//		mapSwitcher.setImageURI(Uri.parse("https://3gomedia.com/travel-go/images/maps/surabayaMap.PNG"))
 
-		mapLoadListener = object : DecodeBitmapTask.Listener{
-			override fun onPostExecuted(bitmap: Bitmap) {
-				(mapSwitcher.nextView as ImageView).setImageBitmap(bitmap)
-				mapSwitcher.showNext()
-			}
-		}
+//		mapLoadListener = object : DecodeBitmapTask.Listener{
+//			override fun onPostExecuted(bitmap: Bitmap) {
+//				(mapSwitcher.nextView as ImageView).setImageBitmap(bitmap)
+//				mapSwitcher.showNext()
+//			}
+//		}
 	}
 
 	private fun initCountryText() {
@@ -259,34 +269,34 @@ class HomeFragment : Fragment() {
 		country2TextView!!.typeface = Typeface.createFromAsset(context!!.assets, "open-sans-extrabold.ttf")
 	}
 
-	private fun initGreenDot() {
-		mapSwitcher.getViewTreeObserver().addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-			override fun onGlobalLayout() {
-				mapSwitcher.getViewTreeObserver().removeOnGlobalLayoutListener(this)
-
-				val viewLeft = mapSwitcher.getLeft()
-				val viewTop = mapSwitcher.getTop() + mapSwitcher.getHeight() / 3
-
-				val border = 100
-				val xRange = Math.max(1, mapSwitcher.getWidth() - border * 2)
-				val yRange = Math.max(1, mapSwitcher.getHeight() / 3 * 2 - border * 2)
-
-				val rnd = Random()
-
-				var i = 0
-				val cnt = dotCoords.size
-				while (i < cnt) {
-					dotCoords[i][0] = viewLeft + border + rnd.nextInt(xRange)
-					dotCoords[i][1] = viewTop + border + rnd.nextInt(yRange)
-					i++
-				}
-
-				greenDot = viewOfLayout.findViewById(R.id.green_dot)
-				greenDot.setX(dotCoords[0][0].toFloat())
-				greenDot.setY(dotCoords[0][1].toFloat())
-			}
-		})
-	}
+//	private fun initGreenDot() {
+//		mapSwitcher.getViewTreeObserver().addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+//			override fun onGlobalLayout() {
+//				mapSwitcher.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+//
+//				val viewLeft = mapSwitcher.getLeft()
+//				val viewTop = mapSwitcher.getTop() + mapSwitcher.getHeight() / 3
+//
+//				val border = 100
+//				val xRange = Math.max(1, mapSwitcher.getWidth() - border * 2)
+//				val yRange = Math.max(1, mapSwitcher.getHeight() / 3 * 2 - border * 2)
+//
+//				val rnd = Random()
+//
+//				var i = 0
+//				val cnt = dotCoords.size
+//				while (i < cnt) {
+//					dotCoords[i][0] = viewLeft + border + rnd.nextInt(xRange)
+//					dotCoords[i][1] = viewTop + border + rnd.nextInt(yRange)
+//					i++
+//				}
+//
+//				greenDot = viewOfLayout.findViewById(R.id.green_dot)
+//				greenDot.setX(dotCoords[0][0].toFloat())
+//				greenDot.setY(dotCoords[0][1].toFloat())
+//			}
+//		})
+//	}
 
 	private fun setCountryText(text: String, left2right: Boolean) {
 		val invisibleText: TextView
@@ -360,12 +370,20 @@ class HomeFragment : Fragment() {
 
 		descriptionsSwitcher.setText((descriptions[pos % descriptions.size]))
 
-		showMap(maps[pos % maps.size])
+//		showMap(maps[pos % maps.size])
+//		mapSwitcher.setImageURI(Uri.parse(maps.get(pos % maps.size)))
 
-		ViewCompat.animate(greenDot)
-			.translationX(dotCoords[pos % dotCoords.size][0].toFloat())
-			.translationY(dotCoords[pos % dotCoords.size][1].toFloat())
-			.start()
+		Picasso
+			.get()
+			.load(maps.get(pos % maps.size))
+			.networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
+			.memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+			.into(mapSwitcher)
+
+//		ViewCompat.animate(greenDot)
+//			.translationX(dotCoords[pos % dotCoords.size][0].toFloat())
+//			.translationY(dotCoords[pos % dotCoords.size][1].toFloat())
+//			.start()
 
 		currentPosition = pos
 	}
@@ -457,18 +475,29 @@ class HomeFragment : Fragment() {
 	}
 
 	private fun getLocation(){
-		val url = "https://3gomedia.com/travel-go/api/getPlaces.php"
+		val url = Constant.C_URL + "getPlaces.php"
 
 		val jsonObjectRequest = object: JsonObjectRequest(
 			Request.Method.GET, url, null, Response.Listener { response ->
-
+				pics.clear()
 				places.clear()
 				descriptions.clear()
+				maps.clear()
 				for(location in 0..response.getJSONArray("data").length()-1){
 					locationID.add(response.getJSONArray("data").getJSONObject(location).getString("id"))
 					places.add(response.getJSONArray("data").getJSONObject(location).getString("name"))
 					descriptions.add(response.getJSONArray("data").getJSONObject(location).getString("description"))
-				}
+                    if(!response.getJSONArray("data").getJSONObject(location).isNull("photo"))
+					    pics.add(response.getJSONArray("data").getJSONObject(location).getJSONObject("photo").getString("urlPhoto"))
+                    else
+                        pics.add("no-photo.png")
+
+					if(!response.getJSONArray("data").getJSONObject(location).isNull("map_photo"))
+						maps.add(Constant.C_URL_IMAGES+"maps/"+response.getJSONArray("data").getJSONObject(location).getString("map_photo"))
+					else
+						maps.add(Constant.C_URL_IMAGES+"location/no-photo.png")
+
+                }
 				sliderAdapter = SliderAdapter(pics, places.size, OnCardClickListener())
 				recyclerView = viewOfLayout.findViewById(R.id.recycler_view) as RecyclerView
 				recyclerView.setAdapter(sliderAdapter)
@@ -482,6 +511,9 @@ class HomeFragment : Fragment() {
 //					fragment.idLocation = locationID.get(position)
 //					fragmentManager!!.beginTransaction().replace(R.id.frame, fragment).addToBackStack(R.id.navigation_home.toString()).commit();
 				}
+
+				initSwitchers()
+//				initGreenDot()
 			},
 			Response.ErrorListener { error -> Log.e("error", error.message) })
 		{

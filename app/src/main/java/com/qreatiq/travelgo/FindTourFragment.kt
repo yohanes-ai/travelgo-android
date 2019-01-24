@@ -103,6 +103,18 @@ class FindTourFragment : Fragment() {
 //                    .addToBackStack(R.id.navigation_home.toString()).commit();
         }
 
+        prefs = activity!!.getSharedPreferences("user_id", Context.MODE_PRIVATE)
+        editor = prefs!!.edit()
+
+//        cities.add("Bali")
+//        cities.add("Jakarta")
+//        cities.add("Medan")
+//        cities.add("Pekanbaru")
+//        cities.add("Aceh")
+//        cities.add("Surabaya")
+//        val adapterSpinner = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, cities)
+//        spinner.adapter = adapterSpinner
+
         val url = "https://3gomedia.com/travel-go/api/getPlaces.php"
 
         val jsonObjectRequest = object: JsonObjectRequest(
@@ -114,7 +126,11 @@ class FindTourFragment : Fragment() {
                 val adapterSpinner = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, cities)
                 spinner.adapter = adapterSpinner
 
-                Log.d("cityGet", cities.toString())
+                if(!prefs!!.getString("location","").equals(""))
+                    spinner.setSelection(cities.indexOf(prefs!!.getString("location",null)))
+
+                editor!!.remove("location")
+                editor!!.commit()
             },
             Response.ErrorListener { error -> Log.e("error", error.message) })
         {
@@ -127,23 +143,6 @@ class FindTourFragment : Fragment() {
         }
 
         queue!!.add(jsonObjectRequest)
-//        cities.add("Bali")
-//        cities.add("Jakarta")
-//        cities.add("Medan")
-//        cities.add("Pekanbaru")
-//        cities.add("Aceh")
-//        cities.add("Surabaya")
-//        val adapterSpinner = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, cities)
-//        spinner.adapter = adapterSpinner
-
-        prefs = activity!!.getSharedPreferences("user_id", Context.MODE_PRIVATE)
-        editor = prefs!!.edit()
-
-        if(!prefs!!.getString("location","").equals(""))
-            spinner.setSelection(cities.indexOf(prefs!!.getString("location",null)))
-
-        editor!!.remove("location")
-        editor!!.commit()
 
         val myDateListener = DatePickerDialog.OnDateSetListener { arg0, arg1, arg2, arg3 ->
             // TODO Auto-generated method stub

@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -20,9 +21,14 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.qreatiq.travelgo.adapters.PlaceVisitAdapter
+import com.qreatiq.travelgo.adapters.ViewPagerAdapter
 import com.qreatiq.travelgo.cards.SliderAdapter
+import com.qreatiq.travelgo.utils.Constant
+import org.json.JSONArray
 import org.w3c.dom.Text
-import java.util.HashMap
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -52,6 +58,13 @@ class LocationDetailFragment : AppCompatActivity() {
     private var loc: SharedPreferences? = null
     private var locID: String? = null
     private var editor: SharedPreferences.Editor? = null
+    private var viewPager: ViewPager? = null
+    private var images: ArrayList<String>? = arrayListOf()
+    private var pagerAdapter: ViewPagerAdapter? = null
+
+    var arrayPlaceVisit: ArrayList<JSONArray>? = arrayListOf()
+    var placeVisitAdapter: PlaceVisitAdapter? = PlaceVisitAdapter(this,arrayPlaceVisit);
+    var placeVisitViewPager: ViewPager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,11 +79,30 @@ class LocationDetailFragment : AppCompatActivity() {
 
         val findTourButton = findViewById<Button>(R.id.button5)
 
-        val url = "https://3gomedia.com/travel-go/api/getPlaceDetail.php?id="+idLocation
+        viewPager = findViewById(R.id.pagerView) as ViewPager
+        placeVisitViewPager = findViewById(R.id.place_visit) as ViewPager
 
         locationName = findViewById(R.id.textView6) as TextView
         locationDesc = findViewById(R.id.textView3) as TextView
 
+        placeVisitViewPager!!.adapter=placeVisitAdapter
+
+        getData()
+        getPhoto()
+        getPlaceVisit()
+
+        findTourButton.setOnClickListener {
+            editor!!.apply()
+            onBackPressed()
+//            val fragmentManager = getFragmentManager()
+//            val fragment: Fragment = FindTourFragment()
+//            fragmentManager!!.beginTransaction().replace(R.id.frame, fragment)
+//                .addToBackStack(R.id.navigation_home.toString()).commit();
+        }
+    }
+
+    fun getData(){
+        val url = Constant.C_URL+"getPlaceDetail.php?id="+idLocation
 
         val jsonObjectRequest = object: JsonObjectRequest(
             Request.Method.GET, url, null, Response.Listener { response ->
@@ -92,16 +124,62 @@ class LocationDetailFragment : AppCompatActivity() {
                 return header
             }
         }
+        queue!!.add(jsonObjectRequest)
+    }
+
+    fun getPhoto(){
+        val url1 = Constant.C_URL+"getPhotoLocation.php?id="+idLocation
+        val jsonObjectRequest = object: JsonObjectRequest(
+            Request.Method.GET, url1, null, Response.Listener { response ->
+                for(x in 0..response.getJSONArray("photo").length()-1){
+                    images!!.add(response.getJSONArray("photo").getJSONObject(x).getString("urlPhoto"))
+                }
+                pagerAdapter = ViewPagerAdapter(this,images)
+                viewPager!!.adapter = pagerAdapter
+
+
+            },
+            Response.ErrorListener { error -> Log.e("error", error.message) })
+        {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val header = HashMap<String, String>()
+                header ["Content-Type"] = "application/json"
+                return header
+            }
+        }
+
 
         queue!!.add(jsonObjectRequest)
+    }
 
-        findTourButton.setOnClickListener {
-            editor!!.apply()
-            onBackPressed()
-//            val fragmentManager = getFragmentManager()
-//            val fragment: Fragment = FindTourFragment()
-//            fragmentManager!!.beginTransaction().replace(R.id.frame, fragment)
-//                .addToBackStack(R.id.navigation_home.toString()).commit();
+    fun getPlaceVisit(){
+        val url1 = Constant.C_URL+"getPlaceVisit.php?id="+idLocation
+        val jsonObjectRequest = object: JsonObjectRequest(
+            Request.Method.GET, url1, null, Response.Listener { response ->
+                var json=JSONArray()
+                var data=response.getJSONArray("data")
+                for(x in 0..data.length()-1){
+                    json.put(x%3,data.getJSONObject(x).getString("urlPhoto"))
+                    if(x%3==2 || x==data.length()-1) {
+                        arrayPlaceVisit!!.add(json)
+                        json=JSONArray()
+                    }
+                }
+                placeVisitAdapter!!.notifyDataSetChanged()
+
+            },
+            Response.ErrorListener { error -> Log.e("error", error.message) })
+        {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val header = HashMap<String, String>()
+                header ["Content-Type"] = "application/json"
+                return header
+            }
         }
+
+
+        queue!!.add(jsonObjectRequest)
     }
 }

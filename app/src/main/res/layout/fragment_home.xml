@@ -107,16 +107,17 @@
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true">
 
-            <ImageSwitcher
+            <ImageView
                     android:id="@+id/ts_map"
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="150dp"
+                    android:layout_alignParentBottom="true"/>
 
             <View
                     android:id="@+id/gradient_top"
                     android:layout_width="match_parent"
-                    android:layout_height="90dp"
+                    android:layout_height="45dp"
                     android:background="@android:color/white"/>
 
             <View
@@ -125,7 +126,7 @@
                     android:background="@drawable/gradient_map"
                     android:layout_below="@+id/gradient_top"/>
 
-            <TextSwitcher
+            <TextView
                     android:id="@+id/ts_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -133,6 +134,8 @@
                     android:layout_marginLeft="61dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
             />
 
             <FrameLayout
@@ -157,25 +160,6 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/left_offset"
                         android:layout_marginLeft="61dp"/>
-
-            </FrameLayout>
-
-            <FrameLayout
-                    android:id="@+id/green_dot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                <View
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:background="@drawable/green_dot_big"
-                        android:alpha="0.5"/>
-
-                <View
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/green_dot_small"/>
 
             </FrameLayout>
 

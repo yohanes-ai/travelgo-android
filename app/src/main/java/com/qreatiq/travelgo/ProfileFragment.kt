@@ -25,6 +25,8 @@ import java.util.HashMap
 import android.R.id.edit
 import android.app.Activity
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.facebook.AccessToken
 import com.facebook.FacebookSdk
 import com.facebook.FacebookSdk.getApplicationContext
@@ -66,6 +68,7 @@ class ProfileFragment : Fragment() {
     private var userID: String? = null
     private var logout: Button? = null
     private var editor: SharedPreferences.Editor? = null
+    private var history: LinearLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +88,7 @@ class ProfileFragment : Fragment() {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
@@ -102,6 +106,7 @@ class ProfileFragment : Fragment() {
         create_package = view.findViewById(R.id.create_package) as Button
         layout = view.findViewById(R.id.frameLayout3) as ConstraintLayout
         queue = Volley.newRequestQueue(activity)
+        history = view.findViewById(R.id.history) as LinearLayout
 
         getData()
 
@@ -137,10 +142,14 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
 
         }
+
+        history!!.setOnClickListener {
+            startActivity(Intent(activity,HistoryTransactionActivity::class.java))
+        }
     }
 
     fun getData(){
-        val url = Constant.C_URL + "profile.php"
+        val url = Constant.C_URL+"profile.php"
 
         val jsonObject = JSONObject()
         jsonObject.put("id",userID)
@@ -149,9 +158,10 @@ class ProfileFragment : Fragment() {
             JsonObjectRequest(Request.Method.POST, url, jsonObject,
                 Response.Listener { response ->
 
-                    name!!.setText(response.getJSONObject("user").getString("name"))
-                    email!!.setText(response.getJSONObject("user").getString("email"))
-                    phone!!.setText(response.getJSONObject("user").getString("phone"))
+
+                    name!!.setText(if(!response.getJSONObject("user").isNull("name")) response.getJSONObject("user").getString("name") else "")
+                    email!!.setText(if(!response.getJSONObject("user").isNull("email")) response.getJSONObject("user").getString("email") else "")
+                    phone!!.setText(if(!response.getJSONObject("user").isNull("phone")) response.getJSONObject("user").getString("phone") else "")
                     if(!response.getJSONObject("user").isNull("name_tour"))
                         tour_name!!.setText(response.getJSONObject("user").getString("name_tour"))
                     if(!response.getJSONObject("user").isNull("description_tour"))
@@ -171,7 +181,7 @@ class ProfileFragment : Fragment() {
 
 
     fun saveData(){
-        val url = "https://3gomedia.com/travel-go/api/saveProfile.php"
+        val url = Constant.C_URL+"saveProfile.php"
 
         val json = JSONObject()
         json.put("name",name!!.text.toString())
