@@ -139,6 +139,7 @@ class ProfileFragment : Fragment() {
 
             val intent = Intent(activity, LoginMenuActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            activity!!.finish()
             startActivity(intent)
 
         }
