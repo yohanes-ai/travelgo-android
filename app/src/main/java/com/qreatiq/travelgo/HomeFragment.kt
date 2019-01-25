@@ -121,15 +121,18 @@ class HomeFragment : Fragment() {
 		// Inflate the layout for this fragment
 		viewOfLayout = inflater!!.inflate(R.layout.fragment_home, container, false)
 
+		return viewOfLayout
+	}
+
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+
 		queue = Volley.newRequestQueue(activity)
 
 		getLocation()
 
 		initRecyclerView()
 		initCountryText()
-
-
-		return viewOfLayout
 	}
 
 	// TODO: Rename method, update argument and hook method into UI event
