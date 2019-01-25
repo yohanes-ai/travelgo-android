@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(),
                     fragmentManager.beginTransaction().replace(R.id.frame, HomeFragment()).commit()
                     fragmentCurr = fragmentHome
                     myFragments.push(fragmentHome)
-                    detail=true
+                    detail=false
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_location -> {
