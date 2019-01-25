@@ -4,10 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< HEAD
-=======
-    android:id="@+id/layout"
->>>>>>> origin/master
     tools:context=".CreateTourPackageActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -105,11 +101,6 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/bottom_sheet_behavior"
         android:padding="10dp"
-<<<<<<< HEAD
-=======
-        android:id="@+id/deleteContainer"
-        android:visibility="gone"
->>>>>>> origin/master
         android:onClick="deletePackage"
         android:background="#ff0000">
         <TextView

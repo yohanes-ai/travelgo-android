@@ -15,6 +15,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.support.v7.widget.Toolbar;
+import android.view.*
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -151,6 +153,18 @@ class LocationDetailFragment : AppCompatActivity() {
 
 
         queue!!.add(jsonObjectRequest)
+        var toolbar : Toolbar = findViewById<Toolbar>(R.id.job_list_toolbar);
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+            getSupportActionBar()?.setTitle("Detail Lokasi")
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu)
     }
 
     fun getPlaceVisit(){

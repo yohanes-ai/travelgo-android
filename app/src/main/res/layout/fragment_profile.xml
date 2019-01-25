@@ -1,234 +1,305 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/ic_background"
-    tools:context=".ProfileFragment"
-    android:id="@+id/frameLayout3">
-
-    <LinearLayout
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/profileLayout"
-        android:padding="10dp">
-        <LinearLayout
+        android:background="@android:color/white"
+        tools:context=".ProfileFragment">
+
+    <android.support.constraint.ConstraintLayout
+            android:id="@+id/frameLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    <include
+            layout="@layout/toolbar_main"
+            android:id="@+id/job_list_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
+            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
-            <TextView
-                android:text="Name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_weight="1"/>
+            android:layout_margin="10dp"
+            card_view:cardCornerRadius="4dp"
+            app:layout_constraintTop_toBottomOf="@id/job_list_toolbar">
 
-            <EditText
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusableInTouchMode="true"
-                android:id="@+id/name"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/ic_launcher_background">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="18sp" android:padding="10dp"
+                          android:text="Data Pribadi"/>
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+
+                    android:textSize="18sp">
+
+                <EditText
+                        android:hint="Nama"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:ems="10"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusableInTouchMode="true"
+                        android:id="@+id/name"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+
+                    android:textSize="18sp">
+
+                <EditText
+                        android:hint="Email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:ems="10"
+                        android:id="@+id/email"
+                        android:clickable="true"
+                        android:focusableInTouchMode="true"
+                        android:layout_weight="1"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+
+                    android:textSize="18sp">
+
+                <EditText
+                        android:hint="Password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusableInTouchMode="true"
+                        android:id="@+id/password"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+
+                    android:textSize="18sp">
+
+                <EditText
+                        android:hint="Re-type Password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:layout_weight="1"
+                        android:id="@+id/confirm_password"
+                        android:clickable="true"
+                        android:focusableInTouchMode="true"
+                        android:ems="10"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+
+                    android:textSize="18sp">
+
+                <EditText
+                        android:hint="Phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:text=""
+                        android:clickable="true"
+                        android:focusableInTouchMode="true"
+                        android:id="@+id/phone"/>
+            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-
-        <LinearLayout
+    <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view2"
+            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
-            <TextView
-                android:text="Email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_weight="1"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/email"
-                android:clickable="true"
-                android:focusableInTouchMode="true"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-            <TextView
-                android:text="Password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView15"
-                android:layout_weight="1"
-                android:textSize="18sp" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusableInTouchMode="true"
-                android:id="@+id/password"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-            <TextView
-                android:text="Re-Type Password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView16"
-                android:textSize="18sp"
-                android:layout_weight="1"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:layout_weight="1"
-                android:id="@+id/confirm_password"
-                android:clickable="true"
-                android:focusableInTouchMode="true"
-                android:ems="10" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-            <TextView
-                android:text="Phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_weight="1"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:layout_weight="1"
-                android:ems="10"
-                android:text=""
-                android:clickable="true"
-                android:focusableInTouchMode="true"
-                android:id="@+id/phone"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-            <TextView
-                android:text="Nama Tour"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView19"
-                android:textSize="18sp"
-                android:layout_weight="1"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusableInTouchMode="true"
-                android:id="@+id/tour_name"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-            <TextView
-                android:text="Deskripsi Tour"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView20"
-                android:layout_weight="1"
-                android:textSize="18sp"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:layout_weight="1"
-                android:ems="10"
-                android:clickable="true"
-                android:focusableInTouchMode="true"
-                android:id="@+id/tour_description" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal">
-            <Button
-                android:text="Simpan"
+            card_view:cardCornerRadius="4dp"
+            app:layout_constraintTop_toBottomOf="@id/card_view">
+
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/button4"
-                style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue"
-                android:layout_weight="1"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintEnd_toEndOf="parent"/>
-            <Button
-                android:text="List Package"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:id="@+id/create_package"
-                android:visibility="gone"
-                style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue"
-                android:layout_weight="1"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/ic_launcher_background">
+
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:textSize="18sp" android:padding="10dp"
+                      android:text="Data Tour"/>
+
         </LinearLayout>
 
-    </LinearLayout>
+            <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+
+                    android:textSize="18sp">
+
+                <EditText
+                        android:hint="Nama Tour"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:ems="10"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusableInTouchMode="true"
+                        android:id="@+id/tour_name"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+
+                    android:textSize="18sp">
+
+                <EditText
+                        android:hint="Deskripsi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:clickable="true"
+                        android:focusableInTouchMode="true"
+                        android:id="@+id/tour_description"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:padding="10dp"
+                    android:orientation="horizontal">
+
+                <Button
+                        android:text="Simpan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button4"
+                        style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+                <Button
+                        android:text="List Package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:id="@+id/create_package"
+                        style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue"
+                        android:layout_weight="1"/>
+            d</LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:background="@drawable/border"
+                    android:id="@+id/history"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/card_view2">
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="History Transaksi"/>
+                <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="10dp"
-        android:background="@drawable/border"
-        android:id="@+id/history"
-        app:layout_constraintTop_toBottomOf="@+id/profileLayout">
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="History Transaksi"/>
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/card_view2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="20dp" >
 
-            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+        <Button android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/logoutBtn"
+                android:text="Logout"/>
     </LinearLayout>
 
-
-
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-    app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"
-    android:paddingHorizontal="16dp">
-        <Button android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:id="@+id/logoutBtn"
-        android:text="Logout"/>
-
-    </LinearLayout>
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

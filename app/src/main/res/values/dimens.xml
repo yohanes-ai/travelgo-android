@@ -8,4 +8,8 @@
     <dimen name="left_offset">61dp</dimen>
     <dimen name="card_width">148dp</dimen>
     <dimen name="card_corner_radius">10dp</dimen>
+
+    <!-- Custom Floating Label -->
+    <dimen name="input_label_vertical_spacing">8dp</dimen>
+    <dimen name="input_label_horizontal_spacing">4dp</dimen>
 </resources>

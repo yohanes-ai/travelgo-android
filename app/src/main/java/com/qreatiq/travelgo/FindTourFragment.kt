@@ -10,7 +10,9 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -108,15 +110,6 @@ class FindTourFragment : Fragment() {
         prefs = activity!!.getSharedPreferences("user_id", Context.MODE_PRIVATE)
         editor = prefs!!.edit()
 
-//        cities.add("Bali")
-//        cities.add("Jakarta")
-//        cities.add("Medan")
-//        cities.add("Pekanbaru")
-//        cities.add("Aceh")
-//        cities.add("Surabaya")
-//        val adapterSpinner = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, cities)
-//        spinner.adapter = adapterSpinner
-
         val url = Constant.C_URL+"getPlaces.php"
 
         val jsonObjectRequest = object: JsonObjectRequest(
@@ -147,10 +140,6 @@ class FindTourFragment : Fragment() {
         queue!!.add(jsonObjectRequest)
 
         val myDateListener = DatePickerDialog.OnDateSetListener { arg0, arg1, arg2, arg3 ->
-            // TODO Auto-generated method stub
-            // arg1 = year
-            // arg2 = month
-            // arg3 = day
             calendar!!.set(Calendar.YEAR, arg1);
             calendar!!.set(Calendar.MONTH, arg2);
             calendar!!.set(Calendar.DAY_OF_MONTH, arg3);
@@ -167,6 +156,14 @@ class FindTourFragment : Fragment() {
             )
             dialog.datePicker.minDate=System.currentTimeMillis() - 1000;
             dialog.show()
+        }
+
+        var toolbar : Toolbar = viewLayout!!.findViewById<Toolbar>(R.id.job_list_toolbar);
+        (activity as AppCompatActivity).setSupportActionBar(toolbar);
+        if((activity as AppCompatActivity).getSupportActionBar()!=null) {
+            (activity as AppCompatActivity).getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+            (activity as AppCompatActivity).getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+            (activity as AppCompatActivity).getSupportActionBar()?.setTitle("Pilih Tour")
         }
 
         return viewLayout
@@ -229,6 +226,7 @@ class FindTourFragment : Fragment() {
                         var findTour : FindTour = FindTour(data.getInt("id"), data.getString("tour") , data.getString("address"), "https://i.imgur.com/zZSwAwH.png")
                         findTours.add(findTour)
                     }
+
                     val adapter = FindTourAdapter(context!!, findTours)
                     listView.adapter = adapter
 

@@ -8,8 +8,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -102,6 +104,12 @@ class TourActivity : AppCompatActivity() {
             }.show()
         }
 
+        listView!!.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View, m: MotionEvent): Boolean {
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                return false
+            }
+        })
 
         button!!.setOnClickListener{
             postBooking()
@@ -112,6 +120,14 @@ class TourActivity : AppCompatActivity() {
 //            param1 = it.getString(ARG_PARAM1)
 //            param2 = it.getString(ARG_PARAM2)
 //        }
+
+        var toolbar : Toolbar = findViewById<Toolbar>(R.id.job_list_toolbar);
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+            getSupportActionBar()?.setTitle("Detail Tour")
+        }
     }
 
 //    override fun onCreateView(
@@ -148,7 +164,7 @@ class TourActivity : AppCompatActivity() {
                     listView!!.adapter = adapter
 
                     location!!.setText(response.getJSONObject("package").getString("tour"))
-                    description!!.setText(response.getJSONObject("package").getString("address"))
+                    description!!.setText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
                     dialog!!.dismiss()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }
