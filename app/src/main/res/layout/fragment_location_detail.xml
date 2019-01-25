@@ -1,146 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout  xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
                                              xmlns:tools="http://schemas.android.com/tools"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
                                              tools:context=".LocationDetailFragment" android:id="@+id/frameLayout"
                                              tools:layout_editor_absoluteY="25dp">
-    <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-    <include
-        layout="@layout/toolbar_main"
-        android:id="@+id/job_list_toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <android.support.v4.view.ViewPager
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="242dp"
-            android:id="@+id/pagerView"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/job_list_toolbar"/>
-
-        <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view"
-                android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:theme="@style/ToolbarTheme"
+            app:titleTextColor="@android:color/white"
+            android:id="@+id/toolbar"/>
+    </android.support.design.widget.AppBarLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                card_view:contentPadding="5dp"
-                card_view:cardCornerRadius="4dp"
-                app:layout_constraintTop_toBottomOf="@id/pagerView">
+                android:layout_height="wrap_content">
 
-            <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                        android:text="Bali"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textView6"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
-                        android:layout_marginStart="5dp" android:layout_marginTop="10dp"
-                        android:layout_marginBottom="3dp" app:layout_constraintBottom_toTopOf="@+id/textView3"/>
-
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Bali is an Indonesian island known for its forested volcanic mountains, iconic rice paddies, beaches and coral reefs. The island is home to religious sites such as cliffside Uluwatu Temple"
-                        android:id="@+id/textView3"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        app:layout_constraintTop_toBottomOf="@+id/textView6" app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
-                        android:layout_marginRight="8dp"/>
-
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view2"
-                android:layout_gravity="center"
+            <android.support.v4.view.ViewPager
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                card_view:contentPadding="5dp"
-                card_view:cardCornerRadius="4dp"
-                app:layout_constraintTop_toBottomOf="@id/card_view">
+                android:layout_height="242dp"
+                android:id="@+id/pagerView"
+                android:scaleType="fitXY"
+                android:layout_marginBottom="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/job_list_toolbar"/>
 
-            <android.support.constraint.ConstraintLayout
+            <android.support.v7.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view"
+                    android:layout_gravity="center"
                     android:layout_width="match_parent"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    card_view:contentPadding="5dp"
+                    card_view:cardCornerRadius="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/pagerView">
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Place to Visit"
-                        android:id="@+id/textView7"
-                        android:textSize="18dp"
-                        android:textStyle="bold"
-
-                        android:layout_marginStart="10dp" android:layout_marginLeft="10dp"
-                        android:layout_marginRight="8dp" android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp" android:layout_marginTop="8dp"
-
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/imageView3" tools:layout_editor_absoluteX="0dp"/>
-
-                <android.support.v4.view.ViewPager
+                <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:id="@+id/place_visit"
-                        android:scaleType="fitXY"
+                        android:layout_height="wrap_content">
 
-                        app:layout_constraintTop_toBottomOf="@+id/textView7"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/imageView3"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                    <TextView
+                            android:text="Bali"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView6"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
+                            android:layout_marginStart="5dp" android:layout_marginTop="10dp"
+                            android:layout_marginBottom="3dp" app:layout_constraintBottom_toTopOf="@+id/textView3"/>
 
-                        android:layout_marginStart="10dp" android:layout_marginLeft="10dp"
-                        android:layout_marginRight="8dp" android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp" android:layout_marginTop="8dp"
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Bali is an Indonesian island known for its forested volcanic mountains, iconic rice paddies, beaches and coral reefs. The island is home to religious sites such as cliffside Uluwatu Temple"
+                            android:id="@+id/textView3"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            app:layout_constraintTop_toBottomOf="@+id/textView6" app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
+                            android:layout_marginRight="8dp"/>
 
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintVertical_bias="0.0"/>
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
 
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view2"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    card_view:contentPadding="5dp"
+                    card_view:cardCornerRadius="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/card_view">
 
-    <Button
-            android:text="Temukan Tour"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:id="@+id/button5"
+                <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_height="wrap_content">
 
-            app:layout_constraintTop_toBottomOf="@id/card_view2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Place to Visit"
+                            android:id="@+id/textView7"
+                            android:textSize="18dp"
+                            android:textStyle="bold"
+
+                            android:layout_marginStart="10dp" android:layout_marginLeft="10dp"
+                            android:layout_marginRight="8dp" android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp" android:layout_marginTop="8dp"
+
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@+id/imageView3" tools:layout_editor_absoluteX="0dp"/>
+
+                    <android.support.v4.view.ViewPager
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:id="@+id/place_visit"
+                            android:scaleType="fitXY"
+
+                            app:layout_constraintTop_toBottomOf="@+id/textView7"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+
+                            android:layout_marginStart="10dp" android:layout_marginLeft="10dp"
+                            android:layout_marginRight="8dp" android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp" android:layout_marginTop="8dp"
+
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintVertical_bias="0.0"/>
+
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+
+            <Button
+                android:text="Temukan Tour"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:id="@+id/button5"
+
+                app:layout_constraintTop_toBottomOf="@id/card_view2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
 
 
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginEnd="10dp" android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp" android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="10dp" android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp" android:layout_marginRight="10dp"
 
-            style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue"/>
+                style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue"/>
 
-    </android.support.constraint.ConstraintLayout>
-</ScrollView>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

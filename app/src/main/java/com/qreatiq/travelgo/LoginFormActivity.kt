@@ -110,7 +110,7 @@ class LoginFormActivity : AppCompatActivity() {
 
 				var intent = Intent(this, MainActivity::class.java)
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-				intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+				intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
 				finish()
 				startActivity(intent)
 			}
@@ -161,7 +161,7 @@ class LoginFormActivity : AppCompatActivity() {
 
 						val intent = Intent(this, MainActivity::class.java)
 //						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-						intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+						intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
 						finish()
 						startActivity(intent)
 					} else {

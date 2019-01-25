@@ -28,7 +28,6 @@
             android:label="@string/app_name"
             android:launchMode="singleTop" />
         <activity android:name=".TourActivity" />
-        <activity android:name=".LocationDetailFragment" />
         <activity
             android:name=".LoginFormActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />

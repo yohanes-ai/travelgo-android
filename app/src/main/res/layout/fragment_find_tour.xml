@@ -77,7 +77,8 @@
                             android:inputType="date"
                             android:ems="10"
                             android:id="@+id/editText2"
-                            android:clickable="true"/>
+                            android:clickable="true"
+                            android:focusable="false"/>
 
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>

@@ -502,9 +502,11 @@ class HomeFragment : Fragment() {
 				recyclerView = viewOfLayout.findViewById(R.id.recycler_view) as RecyclerView
 				recyclerView.setAdapter(sliderAdapter)
 				sliderAdapter.setOnItemClickListener{ position, v ->
-                    val in1 = Intent(activity, LocationDetailFragment::class.java)
-                    in1.putExtra("id",locationID.get(position))
-                    startActivity(in1)
+					val fragment:LocationDetailFragment = LocationDetailFragment()
+					fragment.idLocation=locationID.get(position)
+					val act= activity as MainActivity
+					act.detail=true
+                    fragmentManager!!.beginTransaction().replace(R.id.frame, fragment).commit()
 //					val fragmentManager = getFragmentManager()
 //
 //					val fragment : LocationDetailFragment = LocationDetailFragment()
@@ -527,4 +529,6 @@ class HomeFragment : Fragment() {
 
 		queue!!.add(jsonObjectRequest)
 	}
+
+
 }

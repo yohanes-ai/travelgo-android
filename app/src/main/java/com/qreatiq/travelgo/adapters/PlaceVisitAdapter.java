@@ -49,11 +49,13 @@ public class PlaceVisitAdapter extends PagerAdapter {
                     .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(image1);
+            if(!images.get(position).isNull(1))
             Picasso.get()
                     .load(Constant.Companion.getC_URL_IMAGES()+"visit_place/"+images.get(position).getString(1))
                     .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(image2);
+            if(!images.get(position).isNull(2))
             Picasso.get()
                     .load(Constant.Companion.getC_URL_IMAGES()+"visit_place/"+images.get(position).getString(2))
                     .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)

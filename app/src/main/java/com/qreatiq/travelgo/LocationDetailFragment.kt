@@ -47,7 +47,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class LocationDetailFragment : AppCompatActivity() {
+class LocationDetailFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -65,28 +65,34 @@ class LocationDetailFragment : AppCompatActivity() {
     private var pagerAdapter: ViewPagerAdapter? = null
 
     var arrayPlaceVisit: ArrayList<JSONArray>? = arrayListOf()
-    var placeVisitAdapter: PlaceVisitAdapter? = PlaceVisitAdapter(this,arrayPlaceVisit);
+    var placeVisitAdapter: PlaceVisitAdapter? = null;
     var placeVisitViewPager: ViewPager? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_location_detail)
-//        arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-//        }
-        queue = Volley.newRequestQueue(this)
-        var extras: Intent = intent
-        idLocation=extras.getStringExtra("id")
 
-        val findTourButton = findViewById<Button>(R.id.button5)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        var view = inflater!!.inflate(R.layout.fragment_location_detail, container, false)
+        return view
+    }
 
-        viewPager = findViewById(R.id.pagerView) as ViewPager
-        placeVisitViewPager = findViewById(R.id.place_visit) as ViewPager
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        queue = Volley.newRequestQueue(activity)
 
-        locationName = findViewById(R.id.textView6) as TextView
-        locationDesc = findViewById(R.id.textView3) as TextView
+        val findTourButton = view.findViewById<Button>(R.id.button5)
 
+        viewPager = view.findViewById(R.id.pagerView) as ViewPager
+        placeVisitViewPager = view.findViewById(R.id.place_visit) as ViewPager
+
+        locationName = view.findViewById(R.id.textView6) as TextView
+        locationDesc = view.findViewById(R.id.textView3) as TextView
+
+        var toolbar : Toolbar = view.findViewById(R.id.toolbar) as Toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+        (activity as AppCompatActivity).getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+        (activity as AppCompatActivity).setTitle("Detail Lokasi")
+        toolbar.setNavigationOnClickListener { activity!!.onBackPressed() }
+
+        placeVisitAdapter = PlaceVisitAdapter(activity,arrayPlaceVisit)
         placeVisitViewPager!!.adapter=placeVisitAdapter
 
         getData()
@@ -95,11 +101,7 @@ class LocationDetailFragment : AppCompatActivity() {
 
         findTourButton.setOnClickListener {
             editor!!.apply()
-            onBackPressed()
-//            val fragmentManager = getFragmentManager()
-//            val fragment: Fragment = FindTourFragment()
-//            fragmentManager!!.beginTransaction().replace(R.id.frame, fragment)
-//                .addToBackStack(R.id.navigation_home.toString()).commit();
+            activity!!.onBackPressed()
         }
     }
 
@@ -111,7 +113,7 @@ class LocationDetailFragment : AppCompatActivity() {
                 locationName!!.setText(response.getJSONObject("data").getString("name"))
                 locationDesc!!.setText(response.getJSONObject("data").getString("description"))
 
-                loc = getSharedPreferences("user_id", Context.MODE_PRIVATE)
+                loc = activity!!.getSharedPreferences("user_id", Context.MODE_PRIVATE)
                 editor = loc!!.edit()
                 editor!!.putString("location", response.getJSONObject("data").getString("name"))
 
@@ -136,7 +138,7 @@ class LocationDetailFragment : AppCompatActivity() {
                 for(x in 0..response.getJSONArray("photo").length()-1){
                     images!!.add(response.getJSONArray("photo").getJSONObject(x).getString("urlPhoto"))
                 }
-                pagerAdapter = ViewPagerAdapter(this,images)
+                pagerAdapter = ViewPagerAdapter(activity!!,images)
                 viewPager!!.adapter = pagerAdapter
 
 
@@ -153,18 +155,6 @@ class LocationDetailFragment : AppCompatActivity() {
 
 
         queue!!.add(jsonObjectRequest)
-        var toolbar : Toolbar = findViewById<Toolbar>(R.id.job_list_toolbar);
-        setSupportActionBar(toolbar);
-        if(getSupportActionBar()!=null) {
-            getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar()?.setDisplayShowHomeEnabled(true);
-            getSupportActionBar()?.setTitle("Detail Lokasi")
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu)
     }
 
     fun getPlaceVisit(){

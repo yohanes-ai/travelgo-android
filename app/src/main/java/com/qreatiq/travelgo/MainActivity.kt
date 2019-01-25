@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(),
 
     private var user: SharedPreferences? = null
     private var userID: String? = null
+    var detail: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,8 +125,13 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        finish()
-        super.onBackPressed()
+
+        if(detail) {
+            fragmentManager.beginTransaction().replace(R.id.frame,HomeFragment()).commit()
+            detail=false
+        }
+        else
+            super.onBackPressed()
     }
 
 //    override fun onBackPressed() {
