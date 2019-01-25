@@ -164,6 +164,7 @@ class FindTourFragment : Fragment() {
             (activity as AppCompatActivity).getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
             (activity as AppCompatActivity).getSupportActionBar()?.setDisplayShowHomeEnabled(true);
             (activity as AppCompatActivity).getSupportActionBar()?.setTitle("Pilih Tour")
+            toolbar.setNavigationOnClickListener { activity!!.onBackPressed() }
         }
 
         return viewLayout
@@ -215,6 +216,7 @@ class FindTourFragment : Fragment() {
         val json = JSONObject()
         json.put("location",cities.get(spinner.selectedItemPosition))
         json.put("date",date!!.text.toString())
+        Log.d("data",json.toString())
 
         val jsonObjectRequest = object : JsonObjectRequest(
                 Request.Method.POST, url, json,
@@ -223,7 +225,7 @@ class FindTourFragment : Fragment() {
                     findTours.clear()
                     for(x in 0..response.getJSONArray("user").length()-1){
                         var data = response.getJSONArray("user").getJSONObject(x)
-                        var findTour : FindTour = FindTour(data.getInt("id"), data.getString("tour") , data.getString("address"), "https://i.imgur.com/zZSwAwH.png")
+                        var findTour : FindTour = FindTour(data.getInt("id"), data.getString("tour") , data.getString("date_start")+" - "+data.getString("date_end"), "https://i.imgur.com/zZSwAwH.png")
                         findTours.add(findTour)
                     }
 

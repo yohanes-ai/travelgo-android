@@ -57,16 +57,19 @@ class MainActivity : AppCompatActivity(),
                     fragmentManager.beginTransaction().replace(R.id.frame, HomeFragment()).commit()
                     fragmentCurr = fragmentHome
                     myFragments.push(fragmentHome)
+                    detail=true
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_location -> {
                     fragmentManager.beginTransaction().replace(R.id.frame, FindTourFragment()).commit()
                     fragmentCurr = fragmentFindTour
                     myFragments.push(fragmentFindTour)
+                    detail=true
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_profile -> {
 
+                    detail=true
                     if(userID.equals("Data Not Found")) {
                         var intent = Intent(this, LoginMenuActivity::class.java)
                         startActivity(intent)
@@ -114,10 +117,7 @@ class MainActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
 
-        if(!prefs!!.getString("location","").equals("")) {
-            supportFragmentManager.beginTransaction().replace(R.id.frame, FindTourFragment()).commit()
-            bottomNavigation!!.menu.getItem(2).setChecked(true)
-        }
+
     }
 
     override fun onFragmentInteraction(uri: Uri) {
@@ -127,8 +127,16 @@ class MainActivity : AppCompatActivity(),
     override fun onBackPressed() {
 
         if(detail) {
-            fragmentManager.beginTransaction().replace(R.id.frame,HomeFragment()).commit()
-            detail=false
+            if(!prefs!!.getString("location","").equals("")) {
+                supportFragmentManager.beginTransaction().replace(R.id.frame, FindTourFragment()).commit()
+                bottomNavigation!!.menu.getItem(2).setChecked(true)
+            }
+            else {
+                fragmentManager.beginTransaction().replace(R.id.frame, HomeFragment()).commit()
+                bottomNavigation!!.menu.getItem(0).setChecked(true)
+                detail=false
+            }
+
         }
         else
             super.onBackPressed()

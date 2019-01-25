@@ -135,9 +135,15 @@ class LocationDetailFragment : Fragment() {
         val url1 = Constant.C_URL+"getPhotoLocation.php?id="+idLocation
         val jsonObjectRequest = object: JsonObjectRequest(
             Request.Method.GET, url1, null, Response.Listener { response ->
-                for(x in 0..response.getJSONArray("photo").length()-1){
-                    images!!.add(response.getJSONArray("photo").getJSONObject(x).getString("urlPhoto"))
+
+                if(response.getJSONArray("photo").length() > 0) {
+                    for (x in 0..response.getJSONArray("photo").length() - 1) {
+                        images!!.add(response.getJSONArray("photo").getJSONObject(x).getString("urlPhoto"))
+                    }
+                } else{
+                    images!!.add("no-photo.png")
                 }
+
                 pagerAdapter = ViewPagerAdapter(activity!!,images)
                 viewPager!!.adapter = pagerAdapter
 
