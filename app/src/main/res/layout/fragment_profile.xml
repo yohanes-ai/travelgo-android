@@ -97,7 +97,8 @@
                             android:id="@+id/email"
                             android:clickable="true"
                             android:focusableInTouchMode="true"
-                            android:layout_weight="1"/>
+                            android:layout_weight="1"
+                            android:enabled="false"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout

@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
@@ -14,10 +15,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -26,9 +24,13 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.qreatiq.travelgo.adapters.FindTourAdapter
 import com.qreatiq.travelgo.adapters.PackageTourAdapter
+import com.qreatiq.travelgo.adapters.TourPhotoAdapter
 import com.qreatiq.travelgo.objects.FindTour
 import com.qreatiq.travelgo.objects.PackageTour
 import com.qreatiq.travelgo.utils.Constant
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.alert
@@ -74,6 +76,10 @@ class TourActivity : AppCompatActivity() {
     private var editor: SharedPreferences.Editor? = null
     var dialog: ProgressDialog? = null
 
+    var arrayCarousel: ArrayList<JSONObject> = arrayListOf()
+    var adapter: TourPhotoAdapter? = null
+    var carousel: ViewPager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_tour)
@@ -83,6 +89,9 @@ class TourActivity : AppCompatActivity() {
         queue = Volley.newRequestQueue(this)
         location = findViewById(R.id.textView11) as TextView
         description = findViewById(R.id.textView17) as TextView
+        carousel = findViewById(R.id.carousel) as ViewPager
+        adapter = TourPhotoAdapter(this,arrayCarousel)
+        carousel!!.adapter=adapter
 
         var extras: Intent = intent
         id=extras.getIntExtra("id",1)
@@ -144,7 +153,7 @@ class TourActivity : AppCompatActivity() {
 
     fun getData(){
         val url = Constant.C_URL+"getDetailPackage.php?id="+id
-        Log.d("data",url)
+//        Log.d("data",url)
 
 
         val jsonObjectRequest = object : JsonObjectRequest(
@@ -155,17 +164,22 @@ class TourActivity : AppCompatActivity() {
                         packageTours.add(PackageTour(
                                 data.getInt("id"),
                                 data.getString("name"),
-                                "",
+                                data.getString("url_photo"),
                                 data.getInt("price"),
                                 data.getString("description")
                         ))
                     }
 
-                    val adapter = PackageTourAdapter(this, packageTours)
-                    listView!!.adapter = adapter
+                    val adapter1 = PackageTourAdapter(this, packageTours)
+                    listView!!.adapter = adapter1
 
                     location!!.setText(response.getJSONObject("package").getString("tour"))
-                    description!!.setText(response.getJSONObject("package").getString("address"))
+                    description!!.setText(response.getJSONObject("package").getString("description"))
+
+                    for(x in 0..response.getJSONObject("package").getJSONArray("photo").length()-1)
+                        arrayCarousel.add(response.getJSONObject("package").getJSONArray("photo").getJSONObject(x))
+//                    Log.d("data",arrayCarousel.toString());
+                    adapter!!.notifyDataSetChanged()
                     dialog!!.dismiss()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }

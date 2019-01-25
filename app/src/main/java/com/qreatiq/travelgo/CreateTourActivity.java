@@ -81,6 +81,8 @@ public class CreateTourActivity extends AppCompatActivity {
     Bundle bundle;
     LinearLayout deleteContainer;
 
+    DatePickerDialog startDialog,endDialog;
+
     int CREATE_TOUR=3,EDIT_TOUR=4,pos=0,DELETE_TOUR=5;
 
     @Override
@@ -117,41 +119,47 @@ public class CreateTourActivity extends AppCompatActivity {
 
         getLocation();
 
+        startDialog=new DatePickerDialog(CreateTourActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendarStart.set(Calendar.YEAR, year);
+                        calendarStart.set(Calendar.MONTH, month);
+                        calendarStart.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        endDialog.getDatePicker().setMinDate(calendarStart.getTimeInMillis());
+                        showDate(start,year, month+1, dayOfMonth);
+                    }
+                },
+                calendarStart.get(Calendar.YEAR),
+                calendarStart.get(Calendar.MONTH),
+                calendarStart.get(Calendar.DAY_OF_MONTH));
+
+        endDialog=new DatePickerDialog(CreateTourActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendarEnd.set(Calendar.YEAR, year);
+                        calendarEnd.set(Calendar.MONTH, month);
+                        calendarEnd.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        showDate(end,year, month+1, dayOfMonth);
+                    }
+                },
+                calendarEnd.get(Calendar.YEAR),
+                calendarEnd.get(Calendar.MONTH),
+                calendarEnd.get(Calendar.DAY_OF_MONTH));
+
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(CreateTourActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                calendarStart.set(Calendar.YEAR, year);
-                                calendarStart.set(Calendar.MONTH, month);
-                                calendarStart.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                showDate(start,year, month+1, dayOfMonth);
-                            }
-                        },
-                        calendarStart.get(Calendar.YEAR),
-                        calendarStart.get(Calendar.MONTH),
-                        calendarStart.get(Calendar.DAY_OF_MONTH)).show();
+                startDialog.show();
             }
         });
 
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(CreateTourActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                calendarEnd.set(Calendar.YEAR, year);
-                                calendarEnd.set(Calendar.MONTH, month);
-                                calendarEnd.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                showDate(end,year, month+1, dayOfMonth);
-                            }
-                        },
-                        calendarEnd.get(Calendar.YEAR),
-                        calendarEnd.get(Calendar.MONTH),
-                        calendarEnd.get(Calendar.DAY_OF_MONTH)).show();
+                endDialog.show();
             }
         });
 

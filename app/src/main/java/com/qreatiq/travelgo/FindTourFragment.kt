@@ -69,6 +69,7 @@ class FindTourFragment : Fragment() {
     private var findTours = arrayListOf<FindTour>()
     var prefs: SharedPreferences? = null
     var editor: SharedPreferences.Editor? = null
+    var no_tour: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +89,7 @@ class FindTourFragment : Fragment() {
         spinner = viewLayout!!.findViewById(R.id.spinner)
         date = viewLayout.findViewById(R.id.editText2) as EditText
         queue = Volley.newRequestQueue(activity)
+        no_tour = viewLayout!!.findViewById(R.id.no_tour) as TextView
 
 //        prefs = activity!!.getSharedPreferences("adas",0)
 
@@ -223,14 +225,20 @@ class FindTourFragment : Fragment() {
                 Response.Listener { response ->
 //                    Log.d("responseData", response.toString())
                     findTours.clear()
-                    for(x in 0..response.getJSONArray("user").length()-1){
-                        var data = response.getJSONArray("user").getJSONObject(x)
-                        var findTour : FindTour = FindTour(data.getInt("id"), data.getString("tour") , data.getString("date_start")+" - "+data.getString("date_end"), "https://i.imgur.com/zZSwAwH.png")
-                        findTours.add(findTour)
-                    }
+                    if(response.getJSONArray("user").length()>0) {
+                        for (x in 0..response.getJSONArray("user").length() - 1) {
+                            var data = response.getJSONArray("user").getJSONObject(x)
+                            var findTour: FindTour = FindTour(data.getInt("id"), data.getString("tour"), data.getString("date_start") + " - " + data.getString("date_end"), "https://i.imgur.com/zZSwAwH.png")
+                            findTours.add(findTour)
+                        }
 
-                    val adapter = FindTourAdapter(context!!, findTours)
-                    listView.adapter = adapter
+                        val adapter = FindTourAdapter(context!!, findTours)
+                        listView.adapter = adapter
+                        no_tour!!.visibility = View.GONE
+                    }
+                    else{
+                        no_tour!!.visibility = View.VISIBLE
+                    }
 
                     dialog.dismiss()
                 },

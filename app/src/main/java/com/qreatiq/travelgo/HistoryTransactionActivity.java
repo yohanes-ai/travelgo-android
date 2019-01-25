@@ -37,7 +37,7 @@ public class HistoryTransactionActivity extends AppCompatActivity {
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
+    TextView no_history;
 
 
     @Override
@@ -59,6 +59,7 @@ public class HistoryTransactionActivity extends AppCompatActivity {
         });
 
         queue = Volley.newRequestQueue(this);
+        no_history = (TextView) findViewById(R.id.no_history);
 
         list=(RecyclerView) findViewById(R.id.list);
         adapter=new HistoryTransactionAdapter(array);
@@ -97,9 +98,15 @@ public class HistoryTransactionActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    for(int x=0;x<response.getJSONArray("data").length();x++)
-                        array.add(response.getJSONArray("data").getJSONObject(x));
-                    adapter.notifyDataSetChanged();
+                    if(response.getJSONArray("data").length()>0) {
+                        for (int x = 0; x < response.getJSONArray("data").length(); x++)
+                            array.add(response.getJSONArray("data").getJSONObject(x));
+                        adapter.notifyDataSetChanged();
+                        no_history.setVisibility(View.GONE);
+                    }
+                    else{
+                        no_history.setVisibility(View.VISIBLE);
+                    }
 
 
                 } catch (JSONException e) {

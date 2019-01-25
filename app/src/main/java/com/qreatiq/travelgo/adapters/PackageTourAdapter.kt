@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.qreatiq.travelgo.R
 import com.qreatiq.travelgo.objects.PackageTour
+import com.qreatiq.travelgo.utils.Constant
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
@@ -43,9 +44,9 @@ class PackageTourAdapter(private val context : Context, private val dataSource :
         holder.titleTextView.text = tour.title
         holder.priceTextView.text = "Rp " + format.format(tour.price)
         holder.detailTextView.text = tour.detail
-        if(!tour.imageURL.equals(""))
+        if(!tour.imageURL!!.equals(""))
             Picasso.get()
-                .load(tour.imageURL)
+                .load(Constant.C_URL_IMAGES+"tour_pack/"+tour.imageURL!!)
                 .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .into(holder.thumbnailImageView)

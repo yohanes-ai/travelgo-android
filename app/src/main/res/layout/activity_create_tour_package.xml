@@ -102,6 +102,7 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/bottom_sheet_behavior"
         android:padding="10dp"
+        android:id="@+id/deleteContainer"
         android:onClick="deletePackage"
         android:background="#ff0000">
         <TextView
