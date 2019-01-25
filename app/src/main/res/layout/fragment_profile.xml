@@ -218,6 +218,7 @@
                             android:layout_weight="1"
                             android:clickable="true"
                             android:focusableInTouchMode="true"
+                            android:maxLength="20"
                             android:id="@+id/tour_name"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -240,6 +241,7 @@
                             android:ems="10"
                             android:clickable="true"
                             android:focusableInTouchMode="true"
+                            android:maxLength="99"
                             android:id="@+id/tour_description"/>
                 </android.support.design.widget.TextInputLayout>
 

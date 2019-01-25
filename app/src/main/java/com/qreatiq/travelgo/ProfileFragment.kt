@@ -209,46 +209,52 @@ class ProfileFragment : Fragment() {
 
     fun saveData(view: View){
         hideKeyboard(view)
-        var dialog = ProgressDialog(activity)
-        dialog!!.setMessage("Saving...")
-        dialog.show()
-        val url = Constant.C_URL+"saveProfile.php"
 
-        val json = JSONObject()
-        json.put("name",name!!.text.toString())
-        json.put("email",email!!.text.toString())
-        json.put("password",password!!.text.toString())
-        json.put("phone",phone!!.text.toString())
-        json.put("tour_name",tour_name!!.text.toString())
-        json.put("tour_description",tour_description!!.text.toString())
-        json.put("id",userID)
-
-        Log.d("data",json.toString())
-
-        val jsonObjectRequest = object :
-            JsonObjectRequest(Request.Method.POST, url, json,
-                Response.Listener { response ->
-                    Log.d("data",response.toString())
-                    if(response.getString("status").equals("berhasil")) {
-                        val snackbar = Snackbar.make(layout!!, "Profile Updated", Snackbar.LENGTH_LONG)
-                        snackbar.show()
-                    }
-                    else{
-                        val snackbar = Snackbar.make(layout!!, response.getString("message"), Snackbar.LENGTH_LONG)
-                        snackbar.show()
-                    }
-                    dialog.dismiss()
-                },
-                Response.ErrorListener { error -> Log.e("error", error.message) }
-            ) {
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                val headers = HashMap<String, String>()
-                headers["Content-Type"] = "application/json"
-                return headers
-            }
+        if(!password!!.text.toString().equals(confirm_password!!.text.toString())){
+            val snackbar = Snackbar.make(view, "Confirm Password not same with Password", Snackbar.LENGTH_LONG)
+            snackbar.show()
         }
-        queue!!.add(jsonObjectRequest)
+        else {
+            var dialog = ProgressDialog(activity)
+            dialog!!.setMessage("Saving...")
+            dialog.show()
+            val url = Constant.C_URL + "saveProfile.php"
+
+            val json = JSONObject()
+            json.put("name", name!!.text.toString())
+            json.put("email", email!!.text.toString())
+            json.put("password", password!!.text.toString())
+            json.put("phone", phone!!.text.toString())
+            json.put("tour_name", tour_name!!.text.toString())
+            json.put("tour_description", tour_description!!.text.toString())
+            json.put("id", userID)
+
+            Log.d("data", json.toString())
+
+            val jsonObjectRequest = object :
+                    JsonObjectRequest(Request.Method.POST, url, json,
+                            Response.Listener { response ->
+                                Log.d("data", response.toString())
+                                if (response.getString("status").equals("berhasil")) {
+                                    val snackbar = Snackbar.make(layout!!, "Profile Updated", Snackbar.LENGTH_LONG)
+                                    snackbar.show()
+                                } else {
+                                    val snackbar = Snackbar.make(layout!!, response.getString("message"), Snackbar.LENGTH_LONG)
+                                    snackbar.show()
+                                }
+                                dialog.dismiss()
+                            },
+                            Response.ErrorListener { error -> Log.e("error", error.message) }
+                    ) {
+                @Throws(AuthFailureError::class)
+                override fun getHeaders(): Map<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers["Content-Type"] = "application/json"
+                    return headers
+                }
+            }
+            queue!!.add(jsonObjectRequest)
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
