@@ -2,25 +2,26 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
                                              xmlns:tools="http://schemas.android.com/tools"
+                                             android:background="@drawable/ic_background"
+                                             android:onClick="hideKeyboard"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent" android:id="@+id/relativeLayout">
 
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  app:layout_constraintLeft_toLeftOf="parent"
+                  app:layout_constraintRight_toRightOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:layout_constraintBottom_toBottomOf="parent">
 
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:srcCompat="@drawable/ic_background"
-            android:id="@+id/imageView3" android:scaleType="center"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"/>
+        <View android:layout_width="match_parent" android:layout_height="0dp"
+              android:layout_weight="4" />
 
-    <RelativeLayout
-            android:layout_width="325dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@android:color/white" app:layout_constraintHorizontal_bias="0.508">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/view"
+                android:background="@android:color/white" app:layout_constraintHorizontal_bias="0.508">
 
         <ImageView
                 android:layout_width="match_parent"
@@ -36,7 +37,7 @@
                 android:layout_marginTop="150dp"
                 android:textSize="24sp" android:textAlignment="center"/>
         <EditText
-                android:layout_width="228dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:ems="10"
@@ -53,7 +54,7 @@
                 android:layout_below="@+id/textView2"/>
 
         <EditText
-                android:layout_width="228dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:ems="10"
@@ -69,7 +70,7 @@
                 android:layout_marginLeft="20dp" android:layout_marginStart="20dp"/>
 
         <EditText
-                android:layout_width="228dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:ems="10" android:id="@+id/editText"
@@ -85,7 +86,7 @@
 
         <Button
                 android:text="Create Account"
-                android:layout_width="246dp"
+                android:layout_width="match_parent"
                 android:onClick="goToMain"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true" android:layout_alignParentLeft="true"
@@ -128,7 +129,7 @@
 
         <com.facebook.login.widget.LoginButton
                 android:id="@+id/login_button"
-                android:layout_width="288dp"
+                android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:layout_gravity="center_horizontal"
                 tools:layout_editor_absoluteY="472dp"
@@ -138,4 +139,10 @@
                 android:layout_marginEnd="20dp" android:layout_alignParentStart="true"
                 android:layout_marginStart="17dp"/>
     </RelativeLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="0dp"
+              android:layout_weight="4" />
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

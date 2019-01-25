@@ -27,13 +27,15 @@ class SplashActivity : AppCompatActivity() {
 
         var intent: Intent? = null
 //        intent = Intent(this, LoginMenuActivity::class.java);
-        if(userID.equals("Data Not Found")){
-            intent = Intent(this, LoginMenuActivity::class.java);
-        }
-        else{
-            intent = Intent(this, MainActivity::class.java);
-        }
+//        if(userID.equals("Data Not Found")){
+//            intent = Intent(this, LoginMenuActivity::class.java)
+//        }
+//        else{
+//            intent = Intent(this, MainActivity::class.java)
+//        }
 
+        intent = Intent(this, MainActivity::class.java);
+        finish()
         startActivity(intent);
     }
 }

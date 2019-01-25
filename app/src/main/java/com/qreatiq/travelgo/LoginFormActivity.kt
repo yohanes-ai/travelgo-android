@@ -106,10 +106,11 @@ class LoginFormActivity : AppCompatActivity() {
 				saveLogin = getSharedPreferences("user_id", Context.MODE_PRIVATE)
 				editor = saveLogin!!.edit()
 				editor!!.putString("user_id", response.getString("data"))
-				editor!!.apply()
+				editor!!.commit()
 
-				val intent = Intent(this, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+				var intent = Intent(this, MainActivity::class.java)
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+				intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 				finish()
 				startActivity(intent)
 			}
@@ -152,7 +153,6 @@ class LoginFormActivity : AppCompatActivity() {
 
 			val jsonObjectRequest =
 				object : JsonObjectRequest(Request.Method.POST, url, jsonObject, Response.Listener { response ->
-					Log.d("data123", response.toString())
 					if (response.getString("status").equals("success")) {
 						saveLogin = getSharedPreferences("user_id", Context.MODE_PRIVATE)
 						editor = saveLogin!!.edit()
@@ -160,7 +160,8 @@ class LoginFormActivity : AppCompatActivity() {
 						editor!!.apply()
 
 						val intent = Intent(this, MainActivity::class.java)
-						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+//						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+						intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 						finish()
 						startActivity(intent)
 					} else {

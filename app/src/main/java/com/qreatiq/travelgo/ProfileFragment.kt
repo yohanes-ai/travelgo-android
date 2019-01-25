@@ -25,8 +25,6 @@ import java.util.HashMap
 import android.R.id.edit
 import android.app.Activity
 import android.app.ProgressDialog
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -67,7 +65,6 @@ class ProfileFragment : Fragment() {
     private var save: Button? = null
     private var create_package: Button? = null
     private var layout: ConstraintLayout? = null
-    private lateinit var viewLayout : View
     private var queue: RequestQueue? = null
     private var user: SharedPreferences? = null
     private var userID: String? = null
@@ -93,21 +90,13 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        viewLayout = inflater!!.inflate(R.layout.fragment_profile, container, false)
         user = activity!!.getSharedPreferences("user_id", Context.MODE_PRIVATE)
         userID = user!!.getString("user_id", "Data Not Found")
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        var toolbar : Toolbar = viewLayout!!.findViewById<Toolbar>(R.id.job_list_toolbar);
-        (activity as AppCompatActivity).setSupportActionBar(toolbar);
-        if((activity as AppCompatActivity).getSupportActionBar()!=null) {
-            (activity as AppCompatActivity).getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
-            (activity as AppCompatActivity).getSupportActionBar()?.setDisplayShowHomeEnabled(true);
-            (activity as AppCompatActivity).getSupportActionBar()?.setTitle("Profile")
-        }
 
-        return viewLayout
+        return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -125,11 +114,15 @@ class ProfileFragment : Fragment() {
         layout = view.findViewById(R.id.frameLayout3) as ConstraintLayout
         queue = Volley.newRequestQueue(activity)
         history = view.findViewById(R.id.history) as LinearLayout
-        dialog = ProgressDialog(activity)
-        dialog!!.setMessage("Loading..")
-        dialog!!.show()
 
-        getData()
+
+        if(!userID.equals("Data Not Found")){
+            dialog = ProgressDialog(activity)
+            dialog!!.setMessage("Loading..")
+            dialog!!.show()
+            getData()
+        }
+
 
         save!!.setOnClickListener{
             saveData(it)
@@ -158,7 +151,7 @@ class ProfileFragment : Fragment() {
             FacebookSdk.sdkInitialize(activity)
             LoginManager.getInstance().logOut()
 
-            val intent = Intent(activity, LoginMenuActivity::class.java)
+            val intent = Intent(activity, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             activity!!.finish()
             startActivity(intent)
@@ -184,7 +177,6 @@ class ProfileFragment : Fragment() {
         val jsonObjectRequest = object :
             JsonObjectRequest(Request.Method.POST, url, jsonObject,
                 Response.Listener { response ->
-
 
                     name!!.setText(if(!response.getJSONObject("user").isNull("name")) response.getJSONObject("user").getString("name") else "")
                     email!!.setText(if(!response.getJSONObject("user").isNull("email")) response.getJSONObject("user").getString("email") else "")

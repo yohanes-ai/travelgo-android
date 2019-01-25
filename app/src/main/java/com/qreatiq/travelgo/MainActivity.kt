@@ -2,6 +2,7 @@ package com.qreatiq.travelgo
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
@@ -31,11 +32,19 @@ class MainActivity : AppCompatActivity(),
     private var prefs: SharedPreferences? = null
     var bottomNavigation : BottomNavigationView? = null
 
+    private var user: SharedPreferences? = null
+    private var userID: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         bottomNavigation = findViewById(R.id.navigation) as BottomNavigationView
+
+        user = getSharedPreferences("user_id", Context.MODE_PRIVATE)
+        userID = user!!.getString("user_id", "Data Not Found")
+
+        Log.d("userID", userID)
 
         val fragmentHome : Fragment = HomeFragment()
         val fragmentFindTour : Fragment = FindTourFragment()
@@ -56,10 +65,17 @@ class MainActivity : AppCompatActivity(),
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_profile -> {
-                    fragmentManager.beginTransaction().replace(R.id.frame, ProfileFragment()).commit()
-                    fragmentCurr = fragmentProfile
-                    myFragments.push(fragmentProfile)
-                    return@OnNavigationItemSelectedListener true
+
+                    if(userID.equals("Data Not Found")) {
+                        var intent = Intent(this, LoginMenuActivity::class.java)
+                        startActivity(intent)
+                    }
+                    else{
+                        fragmentManager.beginTransaction().replace(R.id.frame, ProfileFragment()).commit()
+                        fragmentCurr = fragmentProfile
+                        myFragments.push(fragmentProfile)
+                        return@OnNavigationItemSelectedListener true
+                    }
                 }
             }
 
