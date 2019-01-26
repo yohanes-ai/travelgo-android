@@ -4,6 +4,7 @@ package com.qreatiq.travelgo
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.ActivityOptions
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -104,6 +105,8 @@ class HomeFragment : Fragment() {
 	private lateinit var decodeMapBitmapTask: DecodeBitmapTask
 	private lateinit var mapLoadListener: DecodeBitmapTask.Listener
 
+	var dialog:ProgressDialog? = null
+
 	private var locationID = arrayListOf<String>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,6 +129,10 @@ class HomeFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+
+		dialog= ProgressDialog(activity)
+		dialog!!.setMessage("Loading...")
+		dialog!!.show()
 
 		queue = Volley.newRequestQueue(activity)
 
@@ -517,6 +524,7 @@ class HomeFragment : Fragment() {
 //					fragmentManager!!.beginTransaction().replace(R.id.frame, fragment).addToBackStack(R.id.navigation_home.toString()).commit();
 				}
 
+				dialog!!.dismiss()
 				initSwitchers()
 //				initGreenDot()
 			},

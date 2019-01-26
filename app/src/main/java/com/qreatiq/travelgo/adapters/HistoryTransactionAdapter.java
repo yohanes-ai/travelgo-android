@@ -29,13 +29,14 @@ public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTrans
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         //        public TextView name,account;
-        public TextView location,price;
+        public TextView location,price,name;
         public View v;
 
         public MyViewHolder(View view,int i) {
             super(view);
             location = (TextView) view.findViewById(R.id.location);
             price = (TextView) view.findViewById(R.id.price);
+            name = (TextView) view.findViewById(R.id.name);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -82,6 +83,7 @@ public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTrans
             NumberFormat formatter = new DecimalFormat("#,###");
             myViewHolder.location.setText(data.getString("location"));
             myViewHolder.price.setText("Rp. "+formatter.format(data.getInt("price")));
+            myViewHolder.name.setText(data.getString("name"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

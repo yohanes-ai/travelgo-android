@@ -166,7 +166,7 @@ public class CreateTourActivity extends AppCompatActivity {
 
 
         list=(RecyclerView) findViewById(R.id.list);
-        adapter=new CreateTourAdapter(array);
+        adapter=new CreateTourAdapter(array,this);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         list.setLayoutManager(mLayoutManager);

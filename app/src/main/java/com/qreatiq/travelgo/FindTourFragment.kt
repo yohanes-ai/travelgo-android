@@ -211,7 +211,7 @@ class FindTourFragment : Fragment() {
 
     fun getData(){
         var dialog = ProgressDialog(activity)
-        dialog!!.setMessage("Saving...")
+        dialog!!.setMessage("Loading...")
         dialog.show()
         val url = Constant.C_URL+"getPackage.php"
 
@@ -228,7 +228,8 @@ class FindTourFragment : Fragment() {
                     if(response.getJSONArray("user").length()>0) {
                         for (x in 0..response.getJSONArray("user").length() - 1) {
                             var data = response.getJSONArray("user").getJSONObject(x)
-                            var findTour: FindTour = FindTour(data.getInt("id"), data.getString("tour"), data.getString("date_start") + " - " + data.getString("date_end"), "https://i.imgur.com/zZSwAwH.png")
+                            var findTour: FindTour = FindTour(data.getInt("id"), data.getString("tour"), data.getString("date_start") + " - " + data.getString("date_end"),
+                                Constant.C_URL_IMAGES+"package/"+data.getJSONArray("photo").getJSONObject(0).getString("urlPhoto"))
                             findTours.add(findTour)
                         }
 

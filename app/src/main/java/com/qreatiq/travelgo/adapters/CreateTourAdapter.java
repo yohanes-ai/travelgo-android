@@ -1,5 +1,7 @@
 package com.qreatiq.travelgo.adapters;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qreatiq.travelgo.R;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -25,6 +28,7 @@ import java.util.List;
 public class CreateTourAdapter extends RecyclerView.Adapter<CreateTourAdapter.MyViewHolder> {
     public List<JSONObject> dataSet;
     ClickListener clickListener;
+    ProgressDialog dialog;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 //        public TextView name,account;
@@ -51,8 +55,11 @@ public class CreateTourAdapter extends RecyclerView.Adapter<CreateTourAdapter.My
         void onItemClick(int position);
     }
 
-    public CreateTourAdapter(List<JSONObject> dataSet) {
+    public CreateTourAdapter(List<JSONObject> dataSet, Context context) {
         this.dataSet=dataSet;
+        dialog=new ProgressDialog(context);
+        dialog.setMessage("Loading...");
+        dialog.show();
     }
 
     @NonNull
@@ -84,7 +91,17 @@ public class CreateTourAdapter extends RecyclerView.Adapter<CreateTourAdapter.My
                         .load(data.getString("data"))
                         .networkPolicy(NetworkPolicy.NO_CACHE,NetworkPolicy.NO_STORE)
                         .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
-                        .into(myViewHolder.imageView);
+                        .into(myViewHolder.imageView, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                dialog.hide();
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                            }
+                        });
         } catch (JSONException e) {
             e.printStackTrace();
         }
