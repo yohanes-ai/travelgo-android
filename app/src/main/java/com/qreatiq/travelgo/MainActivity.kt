@@ -4,15 +4,24 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.BottomSheetDialog
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import android.util.Base64
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import android.util.SparseArray
+import android.view.View
+import org.json.JSONException
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.util.*
 
 
@@ -35,6 +44,10 @@ class MainActivity : AppCompatActivity(),
     private var user: SharedPreferences? = null
     private var userID: String? = null
     var detail: Boolean = false
+
+    var bottomSheetDialog: BottomSheetDialog? = null
+
+    var profileFragment = ProfileFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +88,7 @@ class MainActivity : AppCompatActivity(),
                         startActivity(intent)
                     }
                     else{
-                        fragmentManager.beginTransaction().replace(R.id.frame, ProfileFragment()).commit()
+                        fragmentManager.beginTransaction().replace(R.id.frame, profileFragment).commit()
                         fragmentCurr = fragmentProfile
                         myFragments.push(fragmentProfile)
                         return@OnNavigationItemSelectedListener true
@@ -140,6 +153,97 @@ class MainActivity : AppCompatActivity(),
         }
         else
             super.onBackPressed()
+    }
+
+    fun addMedia(v: View) {
+        bottomSheetDialog = BottomSheetDialog(this)
+        val view = View.inflate(this, R.layout.list_attach_item, null)
+        bottomSheetDialog!!.setContentView(view)
+        bottomSheetDialog!!.show()
+        //        startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE),1);
+    }
+
+    fun camera(v: View) {
+        startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE), 1)
+    }
+
+    fun gallery(v: View) {
+        val `in` = Intent(Intent.ACTION_PICK)
+        `in`.type = "image/*"
+        startActivityForResult(`in`, 0)
+    }
+
+    fun BitMapToString(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
+    }
+
+    fun StringToBitMap(encodedString: String): Bitmap? {
+        try {
+            val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+        } catch (e: Exception) {
+            e.message
+            return null
+        }
+
+    }
+
+    fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        return Uri.parse(path)
+    }
+
+    protected override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val bitmap: Bitmap
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {
+                //                if (Build.VERSION.SDK_INT > 22)
+                //                    getImageUrl = ImagePath.getPath(this, filePath);
+                //                else
+                //                    //else we will get path directly
+                //                    getImageUrl = filePath.getPath();
+                //
+                //                Log.d("data",data.getExtras().toString());
+                bitmap = data.extras!!.get("data") as Bitmap
+
+                profileFragment.tour_photo!!.setImageBitmap(bitmap)
+                profileFragment.tour_photo!!.setVisibility(View.VISIBLE)
+
+                profileFragment.image_string = BitMapToString(bitmap)
+                profileFragment.link = false
+//                try {
+//                    json.put("link", false)
+//                } catch (e: JSONException) {
+//                    e.printStackTrace()
+//                }
+
+            } else if (requestCode == 0) {
+
+                val selectedImage = data.data
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage)
+
+                    profileFragment.tour_photo!!.setImageBitmap(bitmap)
+                    profileFragment.tour_photo!!.setVisibility(View.VISIBLE)
+                    profileFragment.image_string = BitMapToString(bitmap)
+                    profileFragment.link = false
+//                    json.put("link", false)
+                } catch (e: IOException) {
+                    Log.i("TAG", "Some exception $e")
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+
+            }
+
+            bottomSheetDialog!!.hide()
+        }
     }
 
 //    override fun onBackPressed() {

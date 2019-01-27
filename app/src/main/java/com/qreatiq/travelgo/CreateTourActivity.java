@@ -529,14 +529,6 @@ public class CreateTourActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
-    public void addMedia(View v){
-        bottomSheetDialog=new BottomSheetDialog(this);
-        View view = View.inflate(this, R.layout.list_attach_item, null);
-        bottomSheetDialog.setContentView(view);
-        bottomSheetDialog.show();
-//        startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE),1);
-    }
-
     public void deletePackage(View v){
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setMessage("Are You Sure?")
@@ -558,6 +550,14 @@ public class CreateTourActivity extends AppCompatActivity {
                 })
                 .create();
         dialog.show();
+    }
+
+    public void addMedia(View v){
+        bottomSheetDialog=new BottomSheetDialog(this);
+        View view = View.inflate(this, R.layout.list_attach_item, null);
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
+//        startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE),1);
     }
 
     public void camera(View v){

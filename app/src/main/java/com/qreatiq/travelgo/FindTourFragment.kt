@@ -218,7 +218,7 @@ class FindTourFragment : Fragment() {
         val json = JSONObject()
         json.put("location",cities.get(spinner.selectedItemPosition))
         json.put("date",date!!.text.toString())
-        Log.d("data",json.toString())
+//        Log.d("data",json.toString())
 
         val jsonObjectRequest = object : JsonObjectRequest(
                 Request.Method.POST, url, json,
@@ -229,7 +229,7 @@ class FindTourFragment : Fragment() {
                         for (x in 0..response.getJSONArray("user").length() - 1) {
                             var data = response.getJSONArray("user").getJSONObject(x)
                             var findTour: FindTour = FindTour(data.getInt("id"), data.getString("tour"), data.getString("date_start") + " - " + data.getString("date_end"),
-                                Constant.C_URL_IMAGES+"package/"+data.getJSONArray("photo").getJSONObject(0).getString("urlPhoto"))
+                                Constant.C_URL_IMAGES+"tour/"+data.getString("photo"))
                             findTours.add(findTour)
                         }
 

@@ -15,25 +15,29 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.android.volley.*
-import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.HashMap
-import android.R.id.edit
 import android.app.Activity
 import android.app.ProgressDialog
-import android.view.MotionEvent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.provider.MediaStore
+import android.support.design.widget.BottomSheetDialog
+import android.util.Base64
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
-import com.facebook.AccessToken
 import com.facebook.FacebookSdk
 import com.facebook.FacebookSdk.getApplicationContext
 import com.facebook.login.LoginManager
 import com.qreatiq.travelgo.utils.Constant
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_profile.*
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -71,6 +75,11 @@ class ProfileFragment : Fragment() {
     private var logout: Button? = null
     private var editor: SharedPreferences.Editor? = null
     private var history: LinearLayout? = null
+
+    var tour_photo: ImageView? = null
+    var image_string: String = ""
+    var link: Boolean? = false
+
     internal var focusListener: View.OnFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
         if (!hasFocus)
             hideKeyboard(v)
@@ -114,7 +123,7 @@ class ProfileFragment : Fragment() {
         layout = view.findViewById(R.id.frameLayout3) as ConstraintLayout
         queue = Volley.newRequestQueue(activity)
         history = view.findViewById(R.id.history) as LinearLayout
-
+        tour_photo = view.findViewById(R.id.image) as ImageView
 
         if(!userID.equals("Data Not Found")){
             dialog = ProgressDialog(activity)
@@ -187,6 +196,16 @@ class ProfileFragment : Fragment() {
                     }
                     if(!response.getJSONObject("user").isNull("description_tour"))
                         tour_description!!.setText(response.getJSONObject("user").getString("description_tour"))
+
+                    if(!response.getJSONObject("user").isNull("photo_tour")){
+                        link=true
+                        image_string=response.getJSONObject("user").getString("photo_tour")
+
+                        Picasso.get()
+                                .load(Constant.C_URL_IMAGES+"tour/"+image_string)
+                                .into(tour_photo)
+                        tour_photo!!.visibility=View.VISIBLE
+                    }
                     dialog!!.dismiss()
                 },
                 Response.ErrorListener { error -> Log.e("error", error.message) }
@@ -229,7 +248,8 @@ class ProfileFragment : Fragment() {
             json.put("tour_description", tour_description!!.text.toString())
             json.put("id", userID)
 
-            Log.d("data", json.toString())
+            json.put("tour_photo", image_string)
+            json.put("link", link)
 
             val jsonObjectRequest = object :
                     JsonObjectRequest(Request.Method.POST, url, json,
@@ -253,6 +273,7 @@ class ProfileFragment : Fragment() {
                     return headers
                 }
             }
+            jsonObjectRequest.retryPolicy = DefaultRetryPolicy(60000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
             queue!!.add(jsonObjectRequest)
         }
     }
@@ -275,6 +296,10 @@ class ProfileFragment : Fragment() {
         super.onDetach()
         listener = null
     }
+
+
+
+
 
     /**
      * This interface must be implemented by activities that contain this

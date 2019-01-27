@@ -187,18 +187,18 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:background="@color/ic_launcher_background">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:background="@color/ic_launcher_background">
 
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:textSize="18sp" android:padding="10dp"
-                          android:text="Data Tour"/>
+                    <TextView android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:textSize="18sp" android:padding="10dp"
+                              android:text="Data Tour"/>
 
-            </LinearLayout>
+                </LinearLayout>
 
                 <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -246,6 +246,29 @@
                             android:id="@+id/tour_description"/>
                 </android.support.design.widget.TextInputLayout>
 
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:visibility="gone"
+                    android:id="@+id/image"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Photo"/>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="addMedia"
+                        android:text="Upload File"/>
+                </LinearLayout>
+
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -270,7 +293,9 @@
                             android:id="@+id/create_package"
                             style="@style/Widget.AppCompat.Button.Colored.Qreatiq.Blue"
                             android:layout_weight="1"/>
-                d</LinearLayout>
+                </LinearLayout>
+
+
 
                 <LinearLayout
                         android:layout_width="match_parent"
