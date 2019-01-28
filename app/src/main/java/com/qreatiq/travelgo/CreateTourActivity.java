@@ -288,6 +288,8 @@ public class CreateTourActivity extends AppCompatActivity {
     public void saveData(){
         final ProgressDialog dialog=new ProgressDialog(this);
         dialog.setMessage("Saving");
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
         JSONObject json = new JSONObject();

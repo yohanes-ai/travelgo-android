@@ -86,6 +86,8 @@ public class CreateTourPackageAdapter extends RecyclerView.Adapter<CreateTourPac
         View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_create_package_create_tour_item, viewGroup, false);
         dialog = new ProgressDialog(context);
         dialog.setMessage("Loading...");
+//        dialog.setCancelable(false);
+//        dialog.setCanceledOnTouchOutside(false);
         if(this.dataSet.size()>0) {
             dialog.show();
         }

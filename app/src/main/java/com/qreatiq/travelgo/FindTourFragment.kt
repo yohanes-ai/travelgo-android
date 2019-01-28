@@ -212,6 +212,8 @@ class FindTourFragment : Fragment() {
     fun getData(){
         var dialog = ProgressDialog(activity)
         dialog!!.setMessage("Loading...")
+        dialog.setCancelable(false)
+        dialog.setCanceledOnTouchOutside(false)
         dialog.show()
         val url = Constant.C_URL+"getPackage.php"
 

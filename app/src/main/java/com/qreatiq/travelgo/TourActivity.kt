@@ -98,6 +98,8 @@ class TourActivity : AppCompatActivity() {
 
         dialog=ProgressDialog(this)
         dialog!!.setMessage("Loading")
+        dialog!!.setCancelable(false)
+        dialog!!.setCanceledOnTouchOutside(false)
         dialog!!.show()
 
         user = this.getSharedPreferences("user_id", Context.MODE_PRIVATE)

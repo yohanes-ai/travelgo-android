@@ -240,6 +240,8 @@ class ProfileFragment : Fragment() {
         else {
             var dialog = ProgressDialog(activity)
             dialog!!.setMessage("Saving...")
+            dialog.setCancelable(false)
+            dialog.setCanceledOnTouchOutside(false)
             dialog.show()
             val url = Constant.C_URL + "saveProfile.php"
 

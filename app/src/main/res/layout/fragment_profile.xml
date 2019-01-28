@@ -234,16 +234,13 @@
                         android:textSize="18sp">
 
                     <EditText
-                            android:hint="Deskripsi"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:clickable="true"
-                            android:focusableInTouchMode="true"
-                            android:maxLength="99"
-                            android:id="@+id/tour_description"/>
+                        android:hint="Deskripsi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minLines="3"
+                        android:maxLength="99"
+                        android:id="@+id/tour_description"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <ImageView

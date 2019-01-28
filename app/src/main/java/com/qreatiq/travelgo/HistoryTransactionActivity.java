@@ -91,7 +91,7 @@ public class HistoryTransactionActivity extends AppCompatActivity {
 
     private void getData(){
         String url = Constant.Companion.getC_URL()+"getInvoice.php?id="+prefs.getString("user_id","");
-        Log.d("data",url);
+//        Log.d("data",url);
 
         JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, url, null
                 , new Response.Listener<JSONObject>() {
