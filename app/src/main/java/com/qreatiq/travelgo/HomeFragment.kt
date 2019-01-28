@@ -508,9 +508,7 @@ class HomeFragment : Fragment() {
 					else
 						maps.add(Constant.C_URL_IMAGES+"location/no-photo.png")
 
-					times.add(response.getJSONArray("data").getJSONObject(location).getJSONObject("package").getString("date_start")
-							+" - "+
-							response.getJSONArray("data").getJSONObject(location).getJSONObject("package").getString("date_end"))
+					times.add(response.getJSONArray("data").getJSONObject(location).getString("date"))
 
                 }
 				sliderAdapter = SliderAdapter(pics, places.size, OnCardClickListener())

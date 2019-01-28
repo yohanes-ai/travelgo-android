@@ -90,8 +90,10 @@ public class CreateTourAdapter extends RecyclerView.Adapter<CreateTourAdapter.My
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         JSONObject data=dataSet.get(i);
         try {
-            if(!data.getBoolean("link"))
+            if(!data.getBoolean("link")) {
                 myViewHolder.imageView.setImageBitmap(StringToBitMap(data.getString("data")));
+                dialog.dismiss();
+            }
             else
                 Picasso.get()
                         .load(data.getString("data"))
