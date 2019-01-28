@@ -29,6 +29,7 @@ public class CreateTourAdapter extends RecyclerView.Adapter<CreateTourAdapter.My
     public List<JSONObject> dataSet;
     ClickListener clickListener;
     ProgressDialog dialog;
+    Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 //        public TextView name,account;
@@ -57,15 +58,18 @@ public class CreateTourAdapter extends RecyclerView.Adapter<CreateTourAdapter.My
 
     public CreateTourAdapter(List<JSONObject> dataSet, Context context) {
         this.dataSet=dataSet;
-        dialog=new ProgressDialog(context);
-        dialog.setMessage("Loading...");
-        dialog.show();
+        this.context=context;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_photo_create_tour_item, viewGroup, false);
+        dialog = new ProgressDialog(context);
+        dialog.setMessage("Loading...");
+        if(this.dataSet.size()>0) {
+            dialog.show();
+        }
         return new MyViewHolder(view,i);
     }
 
@@ -94,7 +98,7 @@ public class CreateTourAdapter extends RecyclerView.Adapter<CreateTourAdapter.My
                         .into(myViewHolder.imageView, new Callback() {
                             @Override
                             public void onSuccess() {
-                                dialog.hide();
+                                dialog.dismiss();
                             }
 
                             @Override

@@ -1,5 +1,7 @@
 package com.qreatiq.travelgo.adapters;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.qreatiq.travelgo.R;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -31,6 +34,8 @@ import java.util.List;
 public class CreateTourPackageAdapter extends RecyclerView.Adapter<CreateTourPackageAdapter.MyViewHolder> {
     public List<JSONObject> dataSet;
     ClickListener clickListener;
+    Context context;
+    ProgressDialog dialog;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name,description,price;
@@ -70,14 +75,20 @@ public class CreateTourPackageAdapter extends RecyclerView.Adapter<CreateTourPac
         void onLongItemClick(int position);
     }
 
-    public CreateTourPackageAdapter(List<JSONObject> dataSet) {
+    public CreateTourPackageAdapter(List<JSONObject> dataSet, Context context) {
         this.dataSet=dataSet;
+        this.context=context;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_create_package_create_tour_item, viewGroup, false);
+        dialog = new ProgressDialog(context);
+        dialog.setMessage("Loading...");
+        if(this.dataSet.size()>0) {
+            dialog.show();
+        }
         return new MyViewHolder(view,i);
     }
 
@@ -104,12 +115,22 @@ public class CreateTourPackageAdapter extends RecyclerView.Adapter<CreateTourPac
                             .load(json.getString("image"))
                             .networkPolicy(NetworkPolicy.NO_CACHE,NetworkPolicy.NO_STORE)
                             .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
-                            .into(myViewHolder.imageView);
+                            .into(myViewHolder.imageView, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    dialog.dismiss();
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+
+                                }
+                            });
             }
             myViewHolder.name.setText(json.getString("name"));
             myViewHolder.description.setText((!json.getString("description").equals(""))?json.getString("description"):"-");
             NumberFormat formatter = new DecimalFormat("#,###");
-            myViewHolder.price.setText("Rp. "+formatter.format(json.getInt("price")));
+            myViewHolder.price.setText("Rp. "+formatter.format(json.getDouble("price")));
         } catch (JSONException e) {
             e.printStackTrace();
         }

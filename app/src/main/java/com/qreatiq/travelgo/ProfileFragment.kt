@@ -34,6 +34,8 @@ import com.facebook.FacebookSdk
 import com.facebook.FacebookSdk.getApplicationContext
 import com.facebook.login.LoginManager
 import com.qreatiq.travelgo.utils.Constant
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
 import java.io.ByteArrayOutputStream
@@ -203,6 +205,8 @@ class ProfileFragment : Fragment() {
 
                         Picasso.get()
                                 .load(Constant.C_URL_IMAGES+"tour/"+image_string)
+                                .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
+                                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                                 .into(tour_photo)
                         tour_photo!!.visibility=View.VISIBLE
                     }

@@ -79,8 +79,7 @@ class HomeFragment : Fragment() {
 	private val countries = arrayOf("Indonesia", "Indonesia", "Indonesia", "Indonesia", "Indonesia")
 	private var places = arrayListOf<String>("")
 	private val temperatures = arrayOf("4.1", "4.1", "4.1", "4.1", "4.1")
-	private val times =
-		arrayOf("Aug 1 - Dec 15", "Aug 1 - Dec 15", "Aug 1 - Dec 15")
+	private val times = arrayListOf<String>("")
 
 	private var sliderAdapter = SliderAdapter(pics, 20, OnCardClickListener())
 
@@ -493,6 +492,8 @@ class HomeFragment : Fragment() {
 				places.clear()
 				descriptions.clear()
 				maps.clear()
+				times.clear()
+
 				for(location in 0..response.getJSONArray("data").length()-1){
 					locationID.add(response.getJSONArray("data").getJSONObject(location).getString("id"))
 					places.add(response.getJSONArray("data").getJSONObject(location).getString("name"))
@@ -506,6 +507,10 @@ class HomeFragment : Fragment() {
 						maps.add(Constant.C_URL_IMAGES+"maps/"+response.getJSONArray("data").getJSONObject(location).getString("map_photo"))
 					else
 						maps.add(Constant.C_URL_IMAGES+"location/no-photo.png")
+
+					times.add(response.getJSONArray("data").getJSONObject(location).getJSONObject("package").getString("date_start")
+							+" - "+
+							response.getJSONArray("data").getJSONObject(location).getJSONObject("package").getString("date_end"))
 
                 }
 				sliderAdapter = SliderAdapter(pics, places.size, OnCardClickListener())
@@ -523,6 +528,8 @@ class HomeFragment : Fragment() {
 //					fragment.idLocation = locationID.get(position)
 //					fragmentManager!!.beginTransaction().replace(R.id.frame, fragment).addToBackStack(R.id.navigation_home.toString()).commit();
 				}
+
+				Log.d("data",times.toString())
 
 				dialog!!.dismiss()
 				initSwitchers()

@@ -152,6 +152,7 @@ public class CreateTourActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 startDialog.show();
             }
         });
@@ -182,7 +183,7 @@ public class CreateTourActivity extends AppCompatActivity {
         });
 
         listPackage=(RecyclerView) findViewById(R.id.listPackage);
-        adapter1=new CreateTourPackageAdapter(array1);
+        adapter1=new CreateTourPackageAdapter(array1,this);
 
         RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(this);
         listPackage.setLayoutManager(mLayoutManager1);
