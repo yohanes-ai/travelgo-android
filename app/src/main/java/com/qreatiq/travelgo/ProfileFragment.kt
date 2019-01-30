@@ -103,7 +103,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val viewLayout = inflater!!.inflate(R.layout.fragment_profile, container, false);
+        val viewLayout = inflater!!.inflate(R.layout.fragment_profile, container, false)
 
         user = activity!!.getSharedPreferences("user_id", Context.MODE_PRIVATE)
         userID = user!!.getString("user_id", "Data Not Found")
