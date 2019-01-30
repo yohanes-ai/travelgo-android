@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.qreatiq.travelgo.R
 import com.qreatiq.travelgo.objects.FindTour
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
 class FindTourAdapter(private val context : Context, private val dataSource : ArrayList<FindTour>) : BaseAdapter(){
@@ -39,7 +41,12 @@ class FindTourAdapter(private val context : Context, private val dataSource : Ar
 
         titleTextView.text = tour.title
         contentTextView.text = tour.content
-        Picasso.get().load(tour.imageURL).placeholder(R.mipmap.ic_launcher).into(thumbnailImageView)
+        Picasso.get()
+            .load(tour.imageURL)
+            .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
+            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+            .placeholder(R.mipmap.ic_launcher)
+            .into(thumbnailImageView)
 
         return view
     }

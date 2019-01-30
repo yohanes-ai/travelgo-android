@@ -198,9 +198,9 @@ class MainActivity : AppCompatActivity(),
         return Uri.parse(path)
     }
 
-    protected override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val bitmap: Bitmap
+        var bitmap: Bitmap
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1) {
                 //                if (Build.VERSION.SDK_INT > 22)
@@ -210,7 +210,7 @@ class MainActivity : AppCompatActivity(),
                 //                    getImageUrl = filePath.getPath();
                 //
                 //                Log.d("data",data.getExtras().toString());
-                bitmap = data.extras!!.get("data") as Bitmap
+                bitmap = data!!.extras!!.get("data") as Bitmap
 
                 profileFragment.tour_photo!!.setImageBitmap(bitmap)
                 profileFragment.tour_photo!!.setVisibility(View.VISIBLE)
@@ -225,7 +225,7 @@ class MainActivity : AppCompatActivity(),
 
             } else if (requestCode == 0) {
 
-                val selectedImage = data.data
+                val selectedImage = data!!.data
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage)
 
@@ -241,9 +241,8 @@ class MainActivity : AppCompatActivity(),
                 }
 
             }
-
-            bottomSheetDialog!!.hide()
         }
+        bottomSheetDialog!!.hide()
     }
 
 //    override fun onBackPressed() {

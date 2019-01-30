@@ -245,6 +245,7 @@ class ProfileFragment : Fragment() {
             dialog.show()
             val url = Constant.C_URL + "saveProfile.php"
 
+
             val json = JSONObject()
             json.put("name", name!!.text.toString())
             json.put("email", email!!.text.toString())
