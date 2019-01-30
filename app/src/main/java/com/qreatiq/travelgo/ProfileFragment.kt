@@ -26,6 +26,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.support.design.widget.BottomSheetDialog
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Base64
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -101,13 +103,24 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val viewLayout = inflater!!.inflate(R.layout.fragment_profile, container, false);
+
         user = activity!!.getSharedPreferences("user_id", Context.MODE_PRIVATE)
         userID = user!!.getString("user_id", "Data Not Found")
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
 
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        var toolbar : Toolbar = viewLayout!!.findViewById<Toolbar>(R.id.toolbar);
+        (activity as AppCompatActivity).setSupportActionBar(toolbar);
+        if((activity as AppCompatActivity).getSupportActionBar()!=null) {
+            (activity as AppCompatActivity).getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+            (activity as AppCompatActivity).getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+            (activity as AppCompatActivity).getSupportActionBar()?.setTitle("Profil Pengguna")
+            toolbar.setNavigationOnClickListener { activity!!.onBackPressed() }
+        }
+
+        return viewLayout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
